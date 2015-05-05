@@ -1,0 +1,40 @@
+Hello Professor Pfaffmann,
+
+It is that time for me to turn over my research to you. I apologize that I have
+not been able to get it done. Between projects and finals I haven't seemed to
+have the time to work on this. So to bring you up to speed, I had uploaded the
+files to dropbox at the end of the summer. It seems to be all there, but feel
+free to contact me if something is missing or unclear. I haven't really
+adjusted these files, since I was playing with glob on simpler files to
+understand it first, and since my current versions are pretty much broken with
+my random experiments; in other words, it is besto continue with the ones I
+shared with you on dropbox.
+
+Currently, the z-score are calculated by using all of the uploaded files for
+the 3D matrices. Meaning the average time of distance for each of the z-score
+calculations is does using that of the other uploaded file. Instead, Gabel
+wants the z-score calculations to use all of the files for the mean and
+standard deviation calulations. Thus, a new variable needs to be instantiated
+which draws data from all of the files in the "data" folder of that same maze.
+This new variable will replace loadedFileVis in some places, but not all, since
+only the loaded files will be displayed in heat mazes. In other words, for
+every time this code is ran, data will be collected from that maze for every
+participant and be used, but only the uploaded files in the treeview will be
+displayed. Also, this will change the color, since the color is based on a
+maximum value, which would now be the maximum zscore of every file of that
+maze, not just the uploaded ones.
+
+It is important that it is only the data of the same maze file, since this
+would alther the results. The only files that might need to be touched should
+really be the zScore_Dist (and zScore_Time but those are identical in code
+other than variable names / data so the work is just copying and adjusting) and
+add_load_data [to create a variable similar to loadedFileVis but that doesn't
+require true for visibilty and looks at all files of currentmaze# from the
+given directoy]. Additionally, the main proc might need to be used to
+instantiate/initialize the new variable.
+
+Once again, I am truly so very sorry for not making enough time to do this and
+for adding it to your already very intense workload. Have a good thanksgiving /
+break and I will be in this weekend if you need me to explain anything in
+person or feel free to contact me by email. Thank you.
+
