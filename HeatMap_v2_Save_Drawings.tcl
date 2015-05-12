@@ -57,5 +57,5 @@ proc save_drawing {can fileInfo} {
 
   set fileSaveName "$fileSaveLocation/$fileInfo.$drawingFileType"
 
-  $can postscript -file $fileSaveName -width [expr $can_width*3] -height [expr $can_height * 3]
+  $can postscript -file $fileSaveName -width $can_width -height $can_height
 }
