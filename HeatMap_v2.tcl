@@ -16,7 +16,7 @@ foreach ref [array names loadedFileVis] {
     set trial $loadedFile_trial($ref)
     set drawingWindow($trial\_canT) 0
     set drawingWindow($trial\_canD) 0
-    set drawingWindow($trial\_canG) 0
+    set drawingWindow($trial\_canP) 0
   }
 }
 
@@ -25,14 +25,14 @@ set lineWidth   2
 
 array set zscore_time         {}
 array set area_cnt_trial_time {}
-array set area_cnt_total_time {} 
+array set area_cnt_total_time {}
 array set sum_of_time_squares {}
 array set squares_time        {}
 array set sigma_time          {}
 array set tbar                {}
 array set zscore_dist         {}
 array set area_cnt_trial_dist {}
-array set area_cnt_total_dist {} 
+array set area_cnt_total_dist {}
 array set sum_of_dist_squares {}
 array set squares_dist        {}
 array set sigma_dist          {}
@@ -41,13 +41,13 @@ array set gabel_eff            {}
 
 array set gridLocName         {}
 
-set originalGridSize 256    
+set originalGridSize 256
 set originalSize     [expr {$originalGridSize * 6}]
 
 set displayGridSize  40
 set displaySize      [expr { $displayGridSize * 6}]
 
-set displayOffset    35 
+set displayOffset    35
 
 set can_width  [ expr {$displayOffset * 2 + $displaySize} ]
 set can_height [ expr {$displayOffset * 2 + $displaySize} ]
@@ -91,15 +91,15 @@ set basic_grid_items {
   "2_0" "2_1" "2_2" "2_3" "2_4" "2_5"
   "3_0" "3_1" "3_2" "3_3" "3_4" "3_5"
   "4_0" "4_1" "4_2" "4_3" "4_4" "4_5"
-  "5_0" "5_1" "5_2" "5_3" "5_4" "5_5" "0_0" 
+  "5_0" "5_1" "5_2" "5_3" "5_4" "5_5" "0_0"
 }
 
-# grid position is sum of position, displayed grid size, and displayOffSet 
+# grid position is sum of position, displayed grid size, and displayOffSet
 proc gridPos { position } {
-  
+
   global displayOffset
   global displayGridSize
-  
+
   return [ expr {$displayOffset + $position * $displayGridSize} ]
 }
 
@@ -114,20 +114,20 @@ proc rawPos { pos } {
 }
 
 proc build_main_window {} {
-  
+
   global toggle1
   global treeview
   global currentMaze
-  
+
   #name of data sourcing window
-  wm title . "HeatMaps Data"   
+  wm title . "HeatMaps Data"
 
   frame .f1 -width 0
   pack  .f1 -side top -anchor nw  -fill x -expand 0
 
   button .f1.b2 -command add_data_files -text "Load Data Files" -width 25
   pack   .f1.b2 -side left -anchor nw
-  
+
   frame .f2
   pack  .f2 -side top -anchor nw  -fill both -expand 1
 
@@ -154,10 +154,10 @@ source ./HeatMap_v2_zScore_Dist.tcl
 source ./HeatMap_v2_zScore_PE.tcl
 
 proc toggle_hiding {fileRef refvalue} {
-  
+
   global treeview
   global loadedFileVis
-  
+
   if {[$treeview set $refvalue visible] eq "true"} {
     $treeview set $refvalue visible "false"
     set loadedFileVis($fileRef) "false"
@@ -168,7 +168,7 @@ proc toggle_hiding {fileRef refvalue} {
 
 }
 
-build_main_window 
+build_main_window
 
 source ./HeatMap_v2_Save_Drawings.tcl
 #source ./HeatMap_v2_Screenshot_Windows.tcl
