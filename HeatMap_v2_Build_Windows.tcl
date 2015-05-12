@@ -21,6 +21,7 @@ proc build_zTime_drawing_window {} {
 	global fileSaveLocation
 	global currentMaze
 	global can_width
+  #can_width is set in HeatMap_v2.tcl
 	global can_height
 	global num_of_trials
 	global orderedNames
