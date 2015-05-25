@@ -3,7 +3,7 @@ proc build_drawing_windows {} {
 	build_zTime_drawing_window
 	build_zDist_drawing_window
 	build_PeskyEff_drawing_window
-	build_color_spectrum
+	#build_color_spectrum
 }
 
 
@@ -320,50 +320,50 @@ proc build_PeskyEff_drawing_window {} {
 	}
 }
 
-proc build_color_spectrum {} {
+# proc build_color_spectrum {} {
 
-	set can_w 857
-	set can_h 120
+	# set can_w 857
+	# set can_h 120
 
-	global canC
+	# global canC
 
-	toplevel .s
-	wm title .s "Color Spectrum"
+	# toplevel .s
+	# wm title .s "Color Spectrum"
 
-	set t5 ".s"
+	# set t5 ".s"
 
-	frame $t5.f1 -width 0
-	pack  $t5.f1 -side left -anchor nw  -fill x -expand 0
+	# frame $t5.f1 -width 0
+	# pack  $t5.f1 -side left -anchor nw  -fill x -expand 0
 
-	set canC [canvas $t5.f1.canC  -width $can_w -height $can_h]
-	pack $t5.f1.canC -side left -anchor nw
+	# set canC [canvas $t5.f1.canC  -width $can_w -height $can_h]
+	# pack $t5.f1.canC -side left -anchor nw
 
-	for {set cg 200} {$cg >= 0} {incr cg -1} {
+	# for {set cg 200} {$cg >= 0} {incr cg -1} {
 
-		set c         [expr $cg/100.0]
-		set redVal    [expr int( 65535 - (abs($c / 2) * 65535) )]
-		set cgreenVal [expr int( 65535 - (abs($c / 2) * 45535) )]
-		set blueVal   29
-		set colorVal  [format "#%04x%04x%04x" $redVal $cgreenVal $blueVal ]
+		# set c         [expr $cg/100.0]
+		# set redVal    [expr int( 65535 - (abs($c / 2) * 65535) )]
+		# set cgreenVal [expr int( 65535 - (abs($c / 2) * 45535) )]
+		# set blueVal   29
+		# set colorVal  [format "#%04x%04x%04x" $redVal $cgreenVal $blueVal ]
 
-		$t5.f1.canC  create rectangle [expr 2*(215 - $cg)] 0 [expr 2*(200 - ($cg-10))] 100  -fill $colorVal -outline $colorVal
-		if {$cg % 25 == 0 && $cg != 0} {
-			$t5.f1.canC  create text [expr 2*(210 - $cg)] 100 -text "[expr -1 * $c]" -anchor nw
-		}
-	}
+		# $t5.f1.canC  create rectangle [expr 2*(215 - $cg)] 0 [expr 2*(200 - ($cg-10))] 100  -fill $colorVal -outline $colorVal
+		# if {$cg % 25 == 0 && $cg != 0} {
+			# $t5.f1.canC  create text [expr 2*(210 - $cg)] 100 -text "[expr -1 * $c]" -anchor nw
+		# }
+	# }
 
-	for {set cr 0} {$cr <= 200} {incr cr 1} {
+	# for {set cr 0} {$cr <= 200} {incr cr 1} {
 
-		set d         [expr $cr/100.0]
-		set redVal    65535
-		set greenVal  [expr {int( 65535.0 - (1.0 * $d)  / 2 * 65535.0 )}]
-		set blueVal   29
-		set colorVal  [format "#%04x%04x%04x" $redVal $greenVal $blueVal ]
+		# set d         [expr $cr/100.0]
+		# set redVal    65535
+		# set greenVal  [expr {int( 65535.0 - (1.0 * $d)  / 2 * 65535.0 )}]
+		# set blueVal   29
+		# set colorVal  [format "#%04x%04x%04x" $redVal $greenVal $blueVal ]
 
-		$t5.f1.canC  create rectangle [expr 2*($cr + 215)] 0 [expr 2*($cr + 220)] 100 -fill $colorVal -outline $colorVal
+		# $t5.f1.canC  create rectangle [expr 2*($cr + 215)] 0 [expr 2*($cr + 220)] 100 -fill $colorVal -outline $colorVal
 
-		if {$cr % 25 == 0} {
-			$t5.f1.canC  create text [expr 2*($cr +213)] 100 -text  "$d" -anchor nw
-		}
-	}
-}
+		# if {$cr % 25 == 0} {
+			# $t5.f1.canC  create text [expr 2*($cr +213)] 100 -text  "$d" -anchor nw
+		# }
+	# }
+# }
