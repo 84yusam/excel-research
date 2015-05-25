@@ -17,7 +17,6 @@ proc build_zTime_drawing_window {} {
 	set canT 0
 	array set drawingWindow {}
 
-	global drawingFileType
 	global fileSaveLocation
 	global currentMaze
 	global can_width
@@ -53,11 +52,6 @@ proc build_zTime_drawing_window {} {
 	button $t2.f2.b2 -command save_all_drawing -text "save drawing" -width 20
 	pack   $t2.f2.b2 -side left -anchor nw  -fill x
 
-	set combolist  [list ps jpeg png]
-	set drawingFileType [lindex $combolist 0 ]
-	ttk::combobox $t2.f2.cb1 -values $combolist -textvar drawingFileType
-	pack     $t2.f2.cb1 -side left -anchor nw  -fill x
-
 	#--- frame three (refresh button and what maze number the
 	#--- data is from / should be shown)
 	frame $t2.f3 -width 0
@@ -69,11 +63,11 @@ proc build_zTime_drawing_window {} {
 		-width 20
 	pack   $t2.f3.b1 -side left -anchor nw -fill x
 
-	set combolist2  [list                                      \
+	set combolist  [list                                      \
 		"Maze 1" "Maze 2" "Maze 3" "Maze 4"  "Maze 5"  "Maze 6"  \
 		"Maze 7" "Maze 8" "Maze 9" "Maze 10" "Maze 11" "Maze 12"  ]
-	set currentMaze [lindex $combolist2 0 ]
-	ttk::combobox $t2.f3.cb2 -values $combolist2 -textvar currentMaze
+	set currentMaze [lindex $combolist 0 ]
+	ttk::combobox $t2.f3.cb2 -values $combolist -textvar currentMaze
 	pack     $t2.f3.cb2 -side left -anchor nw  -fill x
 
 	#--- frame four (display all maze maps)
@@ -133,7 +127,6 @@ proc build_zDist_drawing_window {} {
 
 	set prevTD 0
 
-	global drawingFileType
 	global fileSaveLocation
 	global currentMaze
 	global can_width
@@ -171,13 +164,6 @@ proc build_zDist_drawing_window {} {
 	button $t3.f2.b2 -command save_all_drawing -text "save drawing" -width 20
 	pack   $t3.f2.b2 -side left -anchor nw  -fill x
 
-	set combolist  [list ps jpeg png]
-	set drawingFileType [lindex $combolist 0 ]
-
-	ttk::combobox $t3.f2.cb1 -values $combolist -textvar drawingFileType
-
-	pack $t3.f2.cb1 -side left -anchor nw  -fill x
-
 	#--- frame three (refresh button and what maze number
 	#--- the data is from / should be shown)
 	frame $t3.f3 -width 0
@@ -189,12 +175,12 @@ proc build_zDist_drawing_window {} {
 		-width 20
 	pack   $t3.f3.b1 -side left -anchor nw -fill x
 
-	set combolist2  [list                                      \
+	set combolist  [list                                      \
 		"Maze 1" "Maze 2" "Maze 3" "Maze 4"  "Maze 5"  "Maze 6"  \
 		"Maze 7" "Maze 8" "Maze 9" "Maze 10" "Maze 11" "Maze 12"  ]
-	set currentMaze [lindex $combolist2 0 ]
+	set currentMaze [lindex $combolist 0 ]
 
-	ttk::combobox $t3.f3.cb2 -values $combolist2 -textvar currentMaze
+	ttk::combobox $t3.f3.cb2 -values $combolist -textvar currentMaze
 	pack     $t3.f3.cb2 -side left -anchor nw  -fill x
 
 	#--- frame four (display all maze maps)
@@ -243,7 +229,6 @@ proc build_PeskyEff_drawing_window {} {
 	global prevTP
 	set prevTP 0
 
-	global drawingFileType
 	global fileSaveLocation
 	global currentMaze
 	global can_width
@@ -279,11 +264,6 @@ proc build_PeskyEff_drawing_window {} {
 	button $t4.f2.b2 -command save_all_drawing -text "save drawing" -width 20
 	pack   $t4.f2.b2 -side left -anchor nw  -fill x
 
-	set combolist  [list ps jpeg png]
-	set drawingFileType [lindex $combolist 0 ]
-	ttk::combobox $t4.f2.cb1 -values $combolist -textvar drawingFileType
-	pack     $t4.f2.cb1 -side left -anchor nw  -fill x
-
 	#--- frame three (refresh button and what maze number the data is from / should be shown)
 	frame $t4.f3 -width 0
 	pack  $t4.f3 -side top -anchor nw -fill x
@@ -291,10 +271,10 @@ proc build_PeskyEff_drawing_window {} {
 	button $t4.f3.b1 -command refresh_all_drawings -text "refresh drawing" -width 20
 	pack   $t4.f3.b1 -side left -anchor nw -fill x
 
-	set combolist2  [list "Maze 1" "Maze 2" "Maze 3" "Maze 4"  "Maze 5"  "Maze 6" \
+	set combolist  [list "Maze 1" "Maze 2" "Maze 3" "Maze 4"  "Maze 5"  "Maze 6" \
 	                      "Maze 7" "Maze 8" "Maze 9" "Maze 10" "Maze 11" "Maze 12"  ]
-	set currentMaze [lindex $combolist2 0 ]
-	ttk::combobox $t4.f3.cb2 -values $combolist2 -textvar currentMaze
+	set currentMaze [lindex $combolist 0 ]
+	ttk::combobox $t4.f3.cb2 -values $combolist -textvar currentMaze
 	pack     $t4.f3.cb2 -side left -anchor nw  -fill x
 
 	#--- frame four (display all maze maps)
