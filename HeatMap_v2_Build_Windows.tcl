@@ -53,7 +53,7 @@ proc build_zTime_drawing_window {} {
 	button $t2.f2.b2 -command save_all_drawing -text "save drawing" -width 20
 	pack   $t2.f2.b2 -side left -anchor nw  -fill x
 
-	set combolist  [list ps jpg png]
+	set combolist  [list ps jpeg png]
 	set drawingFileType [lindex $combolist 0 ]
 	ttk::combobox $t2.f2.cb1 -values $combolist -textvar drawingFileType
 	pack     $t2.f2.cb1 -side left -anchor nw  -fill x
@@ -171,7 +171,7 @@ proc build_zDist_drawing_window {} {
 	button $t3.f2.b2 -command save_all_drawing -text "save drawing" -width 20
 	pack   $t3.f2.b2 -side left -anchor nw  -fill x
 
-	set combolist  [list ps jpg png]
+	set combolist  [list ps jpeg png]
 	set drawingFileType [lindex $combolist 0 ]
 
 	ttk::combobox $t3.f2.cb1 -values $combolist -textvar drawingFileType
@@ -279,7 +279,7 @@ proc build_PeskyEff_drawing_window {} {
 	button $t4.f2.b2 -command save_all_drawing -text "save drawing" -width 20
 	pack   $t4.f2.b2 -side left -anchor nw  -fill x
 
-	set combolist  [list ps jpg png]
+	set combolist  [list ps jpeg png]
 	set drawingFileType [lindex $combolist 0 ]
 	ttk::combobox $t4.f2.cb1 -values $combolist -textvar drawingFileType
 	pack     $t4.f2.cb1 -side left -anchor nw  -fill x

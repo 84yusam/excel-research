@@ -19,7 +19,6 @@ proc save_all_drawing {} {
   global canT
   global canD
   global canP
-  #global canC
   global drawingWindow
   global currentMaze
 
@@ -48,14 +47,13 @@ proc save_drawing {can fileInfo} {
   global fileSaveLocation
   global can_width
   global can_height
-  global drawingFileType
 
   if {$fileSaveLocation eq "choose output file location"} {
     tk_messageBox -message "You must first select a location and file name."
     return
   }
 
-  set fileSaveName "$fileSaveLocation/$fileInfo.$drawingFileType"
+  set fileSaveName "$fileSaveLocation/$fileInfo.ps"
 
   $can postscript -file $fileSaveName -width $can_width -height $can_height
 }
