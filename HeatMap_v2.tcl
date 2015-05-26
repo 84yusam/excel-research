@@ -125,7 +125,7 @@ proc build_main_window {} {
   frame .f1 -width 0
   pack  .f1 -side top -anchor nw  -fill x -expand 0
 
-  button .f1.b2 -command add_data_files -text "Load Data Files" -width 25
+  button .f1.b2 -command load_folders -text "Load Data Files" -width 25
   pack   .f1.b2 -side left -anchor nw
 
   frame .f2
