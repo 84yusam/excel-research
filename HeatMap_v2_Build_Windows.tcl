@@ -11,6 +11,7 @@ proc build_zTime_drawing_window {} {
 
 	global loadedFileVis
 	global loadedFile_trial
+	global loadedFile_mazenum
 	global canT
 	global drawingWindow
 
@@ -82,10 +83,12 @@ proc build_zTime_drawing_window {} {
 		if { $loadedFileVis($ref) eq "true" } {
 
 			set trial $loadedFile_trial($ref)
+			set mazenum $loadedFile_mazenum($ref)
+
 			if { $num_of_trials <= 5} {
 
-				set drawingWindow($trial\_canT)              \
-					[canvas $t2.f4.drawingWindow($trial\_canT) \
+				set drawingWindow($trial$mazenum\_canT)              \
+					[canvas $t2.f4.drawingWindow($trial$mazenum\_canT) \
 							-width $can_width                      \
 							-height $can_height                      ]
 
@@ -93,21 +96,21 @@ proc build_zTime_drawing_window {} {
 
 				if { $trial <= ($num_of_trials / 2) } {
 
-					set drawingWindow($trial\_canT) [           \
-						canvas $t2.f4.drawingWindow($trial\_canT) \
+					set drawingWindow($trial$mazenum\_canT) [           \
+						canvas $t2.f4.drawingWindow($trial$mazenum\_canT) \
 							-width $can_width                       \
 							-height $can_height]
 
 				} elseif { $trial > ($num_of_trials / 2) } {
 
-					set drawingWindow($trial\_canT) [            \
-						canvas $t2.f5.drawingWindow($trial\_canT)  \
+					set drawingWindow($trial$mazenum\_canT) [            \
+						canvas $t2.f5.drawingWindow($trial$mazenum\_canT)  \
 						-width $can_width                          \
 						-height $can_height]
 				}
 			}
 
-			pack $drawingWindow($trial\_canT) -side left -anchor nw
+			pack $drawingWindow($trial$mazenum\_canT) -side left -anchor nw
 		}
 	}
 }
@@ -116,6 +119,7 @@ proc build_zDist_drawing_window {} {
 
 	global loadedFileVis
 	global loadedFile_trial
+	global loadedFile_mazenum
 	global canD
 	global drawingWindow
 
@@ -195,23 +199,24 @@ proc build_zDist_drawing_window {} {
 		if { $loadedFileVis($ref) eq "true" } {
 
 			set trial $loadedFile_trial($ref)
+			set mazenum $loadedFile_mazenum($ref)
 
 			if { $num_of_trials <= 5} {
 
-				set drawingWindow($trial\_canD) [            \
-					canvas $t3.f4.drawingWindow($trial\_canD)  \
+				set drawingWindow($trial$mazenum\_canD) [            \
+					canvas $t3.f4.drawingWindow($trial$mazenum\_canD)  \
 						-width $can_width -height $can_height      ]
 
 			} else {
 
 				if { $trial <= ($num_of_trials / 2) } {
-					set drawingWindow($trial\_canD) [canvas $t3.f4.drawingWindow($trial\_canD)  -width $can_width -height $can_height]
+					set drawingWindow($trial$mazenum\_canD) [canvas $t3.f4.drawingWindow($trial$mazenum\_canD)  -width $can_width -height $can_height]
 				} elseif { $trial > ($num_of_trials / 2) } {
-					set drawingWindow($trial\_canD) [canvas $t3.f5.drawingWindow($trial\_canD)  -width $can_width -height $can_height]
+					set drawingWindow($trial$mazenum\_canD) [canvas $t3.f5.drawingWindow($trial$mazenum\_canD)  -width $can_width -height $can_height]
 				}
 			}
 
-			pack $drawingWindow($trial\_canD) -side left -anchor nw
+			pack $drawingWindow($trial$mazenum\_canD) -side left -anchor nw
 		}
 	}
 }
@@ -220,6 +225,7 @@ proc build_PeskyEff_drawing_window {} {
 
 	global loadedFileVis
 	global loadedFile_trial
+	global loadedFile_mazenum
 	global canP
 	global drawingWindow
 
@@ -289,11 +295,12 @@ proc build_PeskyEff_drawing_window {} {
 		if { $loadedFileVis($ref) eq "true" } {
 
 			set trial $loadedFile_trial($ref)
+			set mazenum $loadedFile_mazenum($ref)
 
 			if { $num_of_trials <= 5} {
 
-				set drawingWindow($trial\_canP) [            \
-					canvas $t4.f4.drawingWindow($trial\_canP)  \
+				set drawingWindow($trial$mazenum\_canP) [            \
+					canvas $t4.f4.drawingWindow($trial$mazenum\_canP)  \
 						-width $can_width                        \
 						-height $can_height]
 
@@ -301,21 +308,21 @@ proc build_PeskyEff_drawing_window {} {
 
 				if { $trial <= ($num_of_trials / 2) } {
 
-					set drawingWindow($trial\_canP) [            \
-						canvas $t4.f4.drawingWindow($trial\_canP)  \
+					set drawingWindow($trial$mazenum\_canP) [            \
+						canvas $t4.f4.drawingWindow($trial$mazenum\_canP)  \
 							-width $can_width                        \
 							-height $can_height]
 
 				} elseif { $trial > ($num_of_trials / 2) } {
 
-					set drawingWindow($trial\_canP) [            \
-						canvas $t4.f5.drawingWindow($trial\_canP)  \
+					set drawingWindow($trial$mazenum\_canP) [            \
+						canvas $t4.f5.drawingWindow($trial$mazenum\_canP)  \
 							-width $can_width                        \
 							-height $can_height]
 				}
 			}
 
-			pack $drawingWindow($trial\_canP) -side left -anchor nw
+			pack $drawingWindow($trial$mazenum\_canP) -side left -anchor nw
 		}
 	}
 }

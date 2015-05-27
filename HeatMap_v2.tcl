@@ -14,9 +14,9 @@ global drawingWindow {}
 foreach ref [array names loadedFileVis] {
   if { $loadedFileVis($ref) eq "true" } {
     set trial $loadedFile_trial($ref)
-    set drawingWindow($trial\_canT) 0
-    set drawingWindow($trial\_canD) 0
-    set drawingWindow($trial\_canP) 0
+    set drawingWindow($trial$mazenum\_canT) 0
+    set drawingWindow($trial$mazenum\_canD) 0
+    set drawingWindow($trial$mazenum\_canP) 0
   }
 }
 

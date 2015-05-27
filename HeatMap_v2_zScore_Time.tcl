@@ -13,7 +13,7 @@ proc compute_data_time_matrix { can } {
 	global prevXPos
 	global prevYPos
 
-	set prevTotalTime 0    
+	set prevTotalTime 0
 
 	foreach ref [array names loadedFileVis] {
 
@@ -27,7 +27,7 @@ proc compute_data_time_matrix { can } {
 				}
 			}
 
-			foreach item $loadedFile_timedata($ref) { 
+			foreach item $loadedFile_timedata($ref) {
 
 				set xpos        [lindex $item 0]
 				set ypos        [lindex $item 1]
@@ -68,7 +68,7 @@ proc compute_data_time_matrix { can } {
 		if { $loadedFileVis($ref) eq "true" } {
 
 			set trial $loadedFile_trial($ref)
- 
+
 			foreach xval [list 0 1 2 3 4 5] {
 				foreach yval [list 0 1 2 3 4 5] {
 
@@ -81,7 +81,7 @@ proc compute_data_time_matrix { can } {
 	}
 }
 
-proc compute_average_time_matrix {} { 
+proc compute_average_time_matrix {} {
 
 	global area_cnt_trial_time
 	global area_cnt_total_time
@@ -102,7 +102,7 @@ proc compute_average_time_matrix {} {
 
 	foreach xval [list 0 1 2 3 4 5] {
 		foreach yval [list 0 1 2 3 4 5] {
-			set area_cnt_total_time("$xval\_$yval") 0 
+			set area_cnt_total_time("$xval\_$yval") 0
 
 			foreach ref [array names loadedFileVis] {
 				if { $loadedFileVis($ref) eq "true" } {
@@ -145,14 +145,14 @@ proc compute_squares_time_matrix {} {
 		if { $loadedFileVis($ref) eq "true" } {
 
 			set trial $loadedFile_trial($ref)
-   
+
 			foreach xval [list 0 1 2 3 4 5] {
 				foreach yval [list 0 1 2 3 4 5] {
 
 					set squares_time("$xval\_$yval\_$trial") [expr {      \
 						pow ($area_cnt_trial_time("$xval\_$yval\_$trial") - \
-						$tbar("$xval\_$yval"), 2)}]	
-	        
+						$tbar("$xval\_$yval"), 2)}]
+
 					if {$area_cnt_total_time("$xval\_$yval") != 0} {
 						#puts "$xval\_$yval\_$trial  >>> squares are $squares_time("$xval\_$yval\_$trial") <<<"
 					}
@@ -174,7 +174,7 @@ proc compute_sigma_time_matrix {} {
 	global yval
 	global loadedFile_trial
 	global loadedFileVis
-    
+
 	foreach xval [list 0 1 2 3 4 5] {
 		foreach yval [list 0 1 2 3 4 5] {
 
@@ -192,7 +192,7 @@ proc compute_sigma_time_matrix {} {
 			if {$tbar("$xval\_$yval") != 0} {
 				#puts "$xval\_$yval\_$trial   >> sum of squares is $sum_of_time_squares("$xval\_$yval") <<     >>>> sigma is $sigma_time("$xval\_$yval") <<<<"
 			}
-	
+
 		}
 	}
 }
@@ -232,7 +232,7 @@ proc draw_path_ztime {reference can trial} {
 
 	compute_data_time_matrix $can
 	compute_average_time_matrix
-	compute_squares_time_matrix 
+	compute_squares_time_matrix
 	compute_sigma_time_matrix
 	compute_zscore_time
 
@@ -249,7 +249,7 @@ proc draw_path_ztime {reference can trial} {
 	global yval
 
 	set first 1
-  
+
 	foreach {xpos ypos} $loadedFile_data($reference) {
 
 		if {$first} {
@@ -299,24 +299,24 @@ proc draw_path_ztime {reference can trial} {
 			} elseif {  $zscore_time("$xval\_$yval\_$trial") == 0 } {
 				set  gridLoc "$xval\_$yval"
 				$can itemconfigure $gridLocName($gridLoc) -fill yellow
-			} elseif {$zscore_time("$xval\_$yval\_$trial") > 0} {      
+			} elseif {$zscore_time("$xval\_$yval\_$trial") > 0} {
 				set redVal   65535
 				set greenVal [expr {int( 65535.0 - (1.0 * $zscore_time("$xval\_$yval\_$trial"))  / $maxTimeVal * 65535.0 )}]
 				set blueVal  29
-				set colorVal [format "#%04x%04x%04x" $redVal $greenVal $blueVal ]     
+				set colorVal [format "#%04x%04x%04x" $redVal $greenVal $blueVal ]
 				set gridLoc "$xval\_$yval"
-				$can itemconfigure $gridLocName($gridLoc) -fill $colorVal    
-			} elseif {$zscore_time("$xval\_$yval\_$trial") < 0} {    
+				$can itemconfigure $gridLocName($gridLoc) -fill $colorVal
+			} elseif {$zscore_time("$xval\_$yval\_$trial") < 0} {
 				set redVal   [expr int( 65535 - (abs($zscore_time("$xval\_$yval\_$trial") / $minTimeVal) * 65535) )]
 				set greenVal [expr int( 65535 - (abs($zscore_time("$xval\_$yval\_$trial") / $minTimeVal) * 45535) )]
 				set blueVal  1000
-				set colorVal [format "#%04x%04x%04x" $redVal $greenVal $blueVal ] 
+				set colorVal [format "#%04x%04x%04x" $redVal $greenVal $blueVal ]
 				set gridLoc "$xval\_$yval"
 				$can itemconfigure $gridLocName($gridLoc) -fill $colorVal
 			} else {
 				set  gridLoc "$xval\_$yval"
 				$can itemconfigure $gridLocName($gridLoc) -fill white
-			} 
+			}
 		}
 	}
 }

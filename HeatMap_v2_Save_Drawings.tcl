@@ -30,9 +30,9 @@ proc save_all_drawing {} {
       set mazenum [lindex [split $ref "-"] 1]
       set trial [lindex [split $ref "-"] 2]
 
-      save_drawing $drawingWindow($trial\_canT) "z_time\-$id\-$mazenum\-$trial"
-      save_drawing $drawingWindow($trial\_canD) "z_dist\-$id\-$mazenum\-$trial"
-      save_drawing $drawingWindow($trial\_canP) "Pesky_eff\-$id\-$mazenum\-$trial"
+      save_drawing $drawingWindow($trial$mazenum\_canT) "z_time\-$id\-$mazenum\-$trial"
+      save_drawing $drawingWindow($trial$mazenum\_canD) "z_dist\-$id\-$mazenum\-$trial"
+      save_drawing $drawingWindow($trial$mazenum\_canP) "Pesky_eff\-$id\-$mazenum\-$trial"
       #save_drawing $canC                         "Color_Spectrum"
 
     }

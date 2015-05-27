@@ -17,6 +17,7 @@ proc add_data_files { files } {
   global loadedFile_data
   global loadedFile_timedata
   global loadedFile_trial
+  global loadedFile_mazenum
   global fileRef
   global treeview
 
@@ -50,6 +51,7 @@ proc add_data_files { files } {
       set loadedFile_data($fileRef) [lindex $dataList 0]
       set loadedFile_timedata($fileRef) [lindex $dataList 1]
       set loadedFile_trial($fileRef) [lindex $dataList 2]
+      set loadedFile_mazenum($fileRef) [lindex $dataList 3]
 
     }
 
@@ -62,7 +64,8 @@ proc load_data { filename } {
 
   global trial
   global idname
-  global namenum
+  global mazenum
+  #global namenum
 
   set fh [open $filename r]
 
@@ -105,6 +108,6 @@ proc load_data { filename } {
 
   close $fh
 
-  return [list $location $timeValues $trial]
+  return [list $location $timeValues $trial $mazenum]
 
 }

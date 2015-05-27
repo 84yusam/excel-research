@@ -2,6 +2,7 @@ proc refresh_all_drawings {} {
 
 	global loadedFileVis
 	global loadedFile_trial
+	global loadedFile_mazenum
 	global orderedNames
 
 	global canT
@@ -14,30 +15,31 @@ proc refresh_all_drawings {} {
 		if { $loadedFileVis($ref) eq "true" } {
 
 			set trial $loadedFile_trial($ref)
+			set mazenum $loadedFile_mazenum($ref)
 
-			refresh_drawing $ref $drawingWindow($trial\_canT)                 \
+			refresh_drawing $ref $drawingWindow($trial$mazenum\_canT)                 \
 				$trial "drawgrid" "drawouterwalls" "drawinnerwalls" "ztime"
-			refresh_drawing $ref $drawingWindow($trial\_canD)                 \
+			refresh_drawing $ref $drawingWindow($trial$mazenum\_canD)                 \
 				$trial "drawgrid" "drawouterwalls" "drawinnerwalls" "zdist"
-			refresh_drawing $ref $drawingWindow($trial\_canP)                 \
+			refresh_drawing $ref $drawingWindow($trial$mazenum\_canP)                 \
 				$trial "drawgrid" "drawouterwalls" "drawinnerwalls" "pesky_eff"
 
-			$drawingWindow($trial\_canT) \
+			$drawingWindow($trial$mazenum\_canT) \
 				create text 150 300        \
 				-text "Trial $trial"       \
 				-anchor nw
-			$drawingWindow($trial\_canD) \
+			$drawingWindow($trial$mazenum\_canD) \
 				create text 150 300        \
 				-text "Trial $trial"       \
 				-anchor nw
-			$drawingWindow($trial\_canP) \
+			$drawingWindow($trial$mazenum\_canP) \
 				create text 150 300        \
 				-text "Trial $trial"       \
 				-anchor nw
 		}
 	}
 }
- 
+
 proc refresh_drawing {ref can trial item1 item2 item3 item4} {
 
 	global currentMaze
