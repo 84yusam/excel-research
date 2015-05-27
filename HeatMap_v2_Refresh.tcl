@@ -26,15 +26,15 @@ proc refresh_all_drawings {} {
 
 			$drawingWindow($trial$mazenum\_canT) \
 				create text 150 300        \
-				-text "Trial $trial"       \
+				-text "Maze $mazenum Trial $trial"       \
 				-anchor nw
 			$drawingWindow($trial$mazenum\_canD) \
 				create text 150 300        \
-				-text "Trial $trial"       \
+				-text "Maze $mazenum Trial $trial"       \
 				-anchor nw
 			$drawingWindow($trial$mazenum\_canP) \
 				create text 150 300        \
-				-text "Trial $trial"       \
+				-text "Maze $mazenum Trial $trial"       \
 				-anchor nw
 		}
 	}
