@@ -24,17 +24,20 @@ proc refresh_all_drawings {} {
 			refresh_drawing $ref $drawingWindow($trial$mazenum\_canP)                 \
 				$trial "drawgrid" "drawouterwalls" "drawinnerwalls" "pesky_eff"
 
+			#label the images with maze w/ number, not how it is named in file
+			set mazelabel [string index $mazenum 4]
+
 			$drawingWindow($trial$mazenum\_canT) \
 				create text 150 300        \
-				-text "Maze $mazenum Trial $trial"       \
+				-text "Maze $mazelabel Trial $trial"       \
 				-anchor nw
 			$drawingWindow($trial$mazenum\_canD) \
 				create text 150 300        \
-				-text "Maze $mazenum Trial $trial"       \
+				-text "Maze $mazelabel Trial $trial"       \
 				-anchor nw
 			$drawingWindow($trial$mazenum\_canP) \
 				create text 150 300        \
-				-text "Maze $mazenum Trial $trial"       \
+				-text "Maze $mazelabel Trial $trial"       \
 				-anchor nw
 		}
 	}
