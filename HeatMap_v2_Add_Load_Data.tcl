@@ -1,11 +1,17 @@
 proc load_folders {} {
   global directory
-  global fileOpenLocation
+  global fileList
+  global treeview
+  global parent
 
   #have the user choose a folder and extract the files from the folder
   set directory [tk_chooseDirectory -mustexist 1 -title "Choose a folder."]
-  set fileOpenLocation [glob -directory $directory *.txt]
-  add_data_files fileOpenLocation
+  set fileList [glob -directory $directory *.txt]
+
+  #add the directory to the treeview
+  set parent [$treeview insert {} 0 -text $directory]
+
+  add_data_files fileList
 }
 
 
@@ -20,17 +26,16 @@ proc add_data_files { files } {
   global loadedFile_mazenum
   global fileRef
   global treeview
+  global parent
 
-  global fileOpenLocation
+  global fileList
   global orderedFiles
   global orderedNames
   global fileName
 
-  #set fileOpenLocation [tk_getOpenFile -multiple 1]
+  if {[llength $fileList]} {
 
-  if {[llength $fileOpenLocation]} {
-
-     set orderedFiles [lsort -increasing $fileOpenLocation]
+     set orderedFiles [lsort -increasing $fileList]
 
      foreach fullname $orderedFiles {
       set locName  [file dirname $fullname]
@@ -38,9 +43,8 @@ proc add_data_files { files } {
       lappend orderedNames $fileName
 
       set fileRef $fileName
-      set refvalue [$treeview insert {} 0 -text $fileName -tag $fileRef]
+      set refvalue [$treeview insert $parent 0 -text $fileName -tag $fileRef]
       $treeview set $refvalue visible "true"
-      $treeview set $refvalue location $locName
       $treeview tag bind $fileRef <ButtonPress> "toggle_hiding $fileRef $refvalue"
 
       lappend loadedFiles $fileRef
