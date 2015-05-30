@@ -77,22 +77,21 @@ proc load_data { filename } {
   set location   {}
   set timeValues {}
 
-  #set name    [lindex [split $filename "/"] 6]
-  #set id     [split [lindex $name 0] "-"]
-  #set id      [lindex [split $filename "_"] 2]
   set trial   [lindex [split $filename "-"] 2]
   set mazenum [lindex [split $filename "-"] 1]
   #set mazenum to be just the number, not the word 'maze'
   set mazenum [string index $mazenum 4]
 
 
-  #create a new id number that will not have periods
+  #create a new id number that will not have periods and includes atypical vs. typical ending
   set temp [lindex [split $filename "_"] 2]
   set part1 [lindex [split $temp "."] 0]
   set part2 [lindex [split $temp "."] 1]
   set part3 [lindex [split $temp "."] 2]
+  set tmp2 [lindex [split $filename "_"] 3]
+  set part4 [lindex [split $tmp2 "/"] 0]
 
-  set id $part1$part2$part3
+  set id $part1$part2$part3$part4
 
 
   while {![eof $fh]} {
