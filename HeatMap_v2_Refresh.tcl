@@ -3,6 +3,7 @@ proc refresh_all_drawings {} {
 	global loadedFileVis
 	global loadedFile_trial
 	global loadedFile_mazenum
+	global loadedFile_id
 	global orderedNames
 	global currentMaze
 
@@ -15,28 +16,30 @@ proc refresh_all_drawings {} {
 	foreach ref $orderedNames {
 		if { $loadedFileVis($ref) eq "true" } {
 
-			set trial $loadedFile_trial($ref)
+			set trial   $loadedFile_trial($ref)
 			set mazenum $loadedFile_mazenum($ref)
-			set currentMaze "Maze [string index $mazenum 4]"
+			set id      $loadedFile_id($ref)
 
-			refresh_drawing $ref $drawingWindow($trial$mazenum\_canT)                 \
+			set currentMaze "Maze $mazenum"
+
+			refresh_drawing $ref $drawingWindow($mazenum$trial$id\_canT)                 \
 				$trial "drawgrid" "drawouterwalls" "drawinnerwalls" "ztime" $currentMaze
-			refresh_drawing $ref $drawingWindow($trial$mazenum\_canD)                 \
+			refresh_drawing $ref $drawingWindow($mazenum$trial$id\_canD)                 \
 				$trial "drawgrid" "drawouterwalls" "drawinnerwalls" "zdist" $currentMaze
-			refresh_drawing $ref $drawingWindow($trial$mazenum\_canP)                 \
+			refresh_drawing $ref $drawingWindow($mazenum$trial$id\_canP)                 \
 				$trial "drawgrid" "drawouterwalls" "drawinnerwalls" "pesky_eff" $currentMaze
 
-			$drawingWindow($trial$mazenum\_canT) \
-				create text 150 300        \
-				-text "$currentMaze Trial $trial"       \
+			$drawingWindow($mazenum$trial$id\_canT)          \
+				create text 150 300                            \
+				-text "ID $id $currentMaze Trial $trial"       \
 				-anchor nw
-			$drawingWindow($trial$mazenum\_canD) \
-				create text 150 300        \
-				-text "$currentMaze Trial $trial"       \
+			$drawingWindow($mazenum$trial$id\_canD)          \
+				create text 150 300                            \
+				-text "ID $id $currentMaze Trial $trial"       \
 				-anchor nw
-			$drawingWindow($trial$mazenum\_canP) \
-				create text 150 300        \
-				-text "$currentMaze Trial $trial"       \
+			$drawingWindow($mazenum$trial$id\_canP)          \
+				create text 150 300                            \
+				-text "ID $id $currentMaze Trial $trial"       \
 				-anchor nw
 		}
 	}

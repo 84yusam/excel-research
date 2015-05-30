@@ -12,6 +12,7 @@ proc build_zTime_drawing_window {} {
 	global loadedFileVis
 	global loadedFile_trial
 	global loadedFile_mazenum
+	global loadedFile_id
 	global canT
 	global drawingWindow
 
@@ -34,10 +35,10 @@ proc build_zTime_drawing_window {} {
 		}
 	}
 
-	toplevel .zTimeWindow
-	wm title .zTimeWindow "Heat Map using z-Scores for Time"
+	toplevel .zTime
+	wm title .zTime "Heat Map using z-Scores for Time"
 
-	set t2 ".zTimeWindow"
+	set t2 ".zTime"
 
 	#--- frame one (button to source outside files for data)
 	frame $t2.f1 -width 0
@@ -85,8 +86,9 @@ proc build_zTime_drawing_window {} {
 
 			incr numAdded
 
-			set trial $loadedFile_trial($ref)
+			set trial   $loadedFile_trial($ref)
 			set mazenum $loadedFile_mazenum($ref)
+			set id      $loadedFile_id($ref)
 
 			global unrounded2
 			set unrounded2 [expr [expr $numAdded + 0.0] / 5]
@@ -95,11 +97,11 @@ proc build_zTime_drawing_window {} {
 			global frameNum
 			set frameNum [expr int([expr $frames + 3])]
 
-			set drawingWindow($trial$mazenum\_canT)                        \
-				[canvas $t2.f$frameNum.drawingWindow($trial$mazenum\_canT) \
+			set drawingWindow($mazenum$trial$id\_canT)                        \
+				[canvas $t2.f$frameNum.drawingWindow($mazenum$trial$id\_canT) \
 					-width $can_width -height $can_height]
 
-			pack $drawingWindow($trial$mazenum\_canT) -side left -anchor nw
+			pack $drawingWindow($mazenum$trial$id\_canT) -side left -anchor nw
 		}
 	}
 }
@@ -109,6 +111,7 @@ proc build_zDist_drawing_window {} {
 	global loadedFileVis
 	global loadedFile_trial
 	global loadedFile_mazenum
+	global loadedFile_id
 	global canD
 	global drawingWindow
 
@@ -135,10 +138,10 @@ proc build_zDist_drawing_window {} {
 		}
 	}
 
-	toplevel .zDistWindow
-	wm title .zDistWindow "Heat Map using z-Scores for Distance"
+	toplevel .zDist
+	wm title .zDist "Heat Map using z-Scores for Distance"
 
-	set t3 ".zDistWindow"
+	set t3 ".zDist"
 
 	#--- frame one (button to source outside files for data)
 	frame $t3.f1 -width 0
@@ -186,8 +189,9 @@ proc build_zDist_drawing_window {} {
 
 			incr numAdded
 
-			set trial $loadedFile_trial($ref)
+			set trial   $loadedFile_trial($ref)
 			set mazenum $loadedFile_mazenum($ref)
+			set id      $loadedFile_id($ref)
 
 			global unrounded2
 			set unrounded2 [expr [expr $numAdded + 0.0] / 5]
@@ -196,11 +200,11 @@ proc build_zDist_drawing_window {} {
 			global frameNum
 			set frameNum [expr int([expr $frames + 3])]
 
-			set drawingWindow($trial$mazenum\_canD)                        \
-				[canvas $t3.f$frameNum.drawingWindow($trial$mazenum\_canD) \
+			set drawingWindow($mazenum$trial$id\_canD)                        \
+				[canvas $t3.f$frameNum.drawingWindow($mazenum$trial$id\_canD) \
 					-width $can_width -height $can_height]
 
-			pack $drawingWindow($trial$mazenum\_canD) -side left -anchor nw
+			pack $drawingWindow($mazenum$trial$id\_canD) -side left -anchor nw
 		}
 	}
 }
@@ -210,6 +214,7 @@ proc build_PeskyEff_drawing_window {} {
 	global loadedFileVis
 	global loadedFile_trial
 	global loadedFile_mazenum
+	global loadedFile_id
 	global canP
 	global drawingWindow
 
@@ -234,10 +239,10 @@ proc build_PeskyEff_drawing_window {} {
 		}
 	}
 
-	toplevel .peskyEffWindow
-	wm title .peskyEffWindow "Heat Map using Pesky Efficiency Scores"
+	toplevel .peskyEff
+	wm title .peskyEff "Heat Map using Pesky Efficiency Scores"
 
-	set t4 ".peskyEffWindow"
+	set t4 ".peskyEff"
 
 	#--- frame one (button to source outside files for data)
 	frame $t4.f1 -width 0
@@ -282,8 +287,9 @@ proc build_PeskyEff_drawing_window {} {
 
 			incr numAdded
 
-			set trial $loadedFile_trial($ref)
+			set trial   $loadedFile_trial($ref)
 			set mazenum $loadedFile_mazenum($ref)
+			set id      $loadedFile_id($ref)
 
 			global unrounded2
 			set unrounded2 [expr [expr $numAdded + 0.0] / 5]
@@ -292,11 +298,11 @@ proc build_PeskyEff_drawing_window {} {
 			global frameNum
 			set frameNum [expr int([expr $frames + 3])]
 
-			set drawingWindow($trial$mazenum\_canP)                        \
-				[canvas $t4.f$frameNum.drawingWindow($trial$mazenum\_canP) \
+			set drawingWindow($mazenum$trial$id\_canP)                        \
+				[canvas $t4.f$frameNum.drawingWindow($mazenum$trial$id\_canP) \
 					-width $can_width -height $can_height]
 
-			pack $drawingWindow($trial$mazenum\_canP) -side left -anchor nw
+			pack $drawingWindow($mazenum$trial$id\_canP) -side left -anchor nw
 		}
 	}
 }

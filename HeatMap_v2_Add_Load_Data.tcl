@@ -24,6 +24,7 @@ proc add_data_files { files } {
   global loadedFile_timedata
   global loadedFile_trial
   global loadedFile_mazenum
+  global loadedFile_id
   global fileRef
   global treeview
   global parent
@@ -52,11 +53,11 @@ proc add_data_files { files } {
       set loadedFileVis($fileRef) "true"
 
       set dataList [load_data $fullname]
-      set loadedFile_data($fileRef) [lindex $dataList 0]
+      set loadedFile_data($fileRef)     [lindex $dataList 0]
       set loadedFile_timedata($fileRef) [lindex $dataList 1]
-      set loadedFile_trial($fileRef) [lindex $dataList 2]
-      set loadedFile_mazenum($fileRef) [lindex $dataList 3]
-
+      set loadedFile_trial($fileRef)    [lindex $dataList 2]
+      set loadedFile_mazenum($fileRef)  [lindex $dataList 3]
+      set loadedFile_id($fileRef)       [lindex $dataList 4]
     }
 
   }
@@ -67,9 +68,8 @@ proc add_data_files { files } {
 proc load_data { filename } {
 
   global trial
-  global idname
+  global id
   global mazenum
-  #global namenum
 
   set fh [open $filename r]
 
@@ -77,10 +77,23 @@ proc load_data { filename } {
   set location   {}
   set timeValues {}
 
-  set name [lindex [split $filename "/"] 6]
-  set idname [split [lindex $name 0] "-"]
-  set trial [lindex [split $filename "-"] 2]
+  #set name    [lindex [split $filename "/"] 6]
+  #set id     [split [lindex $name 0] "-"]
+  #set id      [lindex [split $filename "_"] 2]
+  set trial   [lindex [split $filename "-"] 2]
   set mazenum [lindex [split $filename "-"] 1]
+  #set mazenum to be just the number, not the word 'maze'
+  set mazenum [string index $mazenum 4]
+
+
+  #create a new id number that will not have periods
+  set temp [lindex [split $filename "_"] 2]
+  set part1 [lindex [split $temp "."] 0]
+  set part2 [lindex [split $temp "."] 1]
+  set part3 [lindex [split $temp "."] 2]
+
+  set id $part1$part2$part3
+
 
   while {![eof $fh]} {
 
@@ -112,6 +125,6 @@ proc load_data { filename } {
 
   close $fh
 
-  return [list $location $timeValues $trial $mazenum]
+  return [list $location $timeValues $trial $mazenum $id]
 
 }

@@ -9,14 +9,18 @@ array set loadedFile_trial {}
 
 global loadedFileVis
 global loadedFile_trial
+global loadedFile_mazenum
+global loadedFile_id
 global drawingWindow {}
 
 foreach ref [array names loadedFileVis] {
   if { $loadedFileVis($ref) eq "true" } {
-    set trial $loadedFile_trial($ref)
-    set drawingWindow($trial$mazenum\_canT) 0
-    set drawingWindow($trial$mazenum\_canD) 0
-    set drawingWindow($trial$mazenum\_canP) 0
+    set trial   $loadedFile_trial($ref)
+    set mazenum $loadedFile_mazenum($ref)
+    set id      $loadedFile_id($ref)
+    set drawingWindow($mazenum$trial$id\_canT) 0
+    set drawingWindow($mazenum$trial$id\_canD) 0
+    set drawingWindow($mazenum$trial$id\_canP) 0
   }
 }
 
@@ -135,7 +139,7 @@ proc build_main_window {} {
   set treeview [ttk::treeview .f2.tree -columns "visible"]
   $treeview heading visible  -text "Visible"
 
-  $treeview column #0 -width 400 -stretch 1
+  $treeview column #0 -width 500 -stretch 1
   $treeview column visible  -width 100 -stretch 0 -anchor center
   pack $treeview -side left -anchor nw -fill both  -expand 1
 
