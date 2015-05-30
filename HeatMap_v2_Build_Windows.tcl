@@ -21,15 +21,17 @@ proc build_zTime_drawing_window {} {
 	global fileSaveLocation
 	global currentMaze
 	global can_width
-  #can_width is set in HeatMap_v2.tcl
 	global can_height
-	global num_of_trials
+	global num_of_imgs
+	global numAdded
 	global orderedNames
+	global numFrames
+	global t2
 
-	set num_of_trials 0
+	set num_of_imgs 0
 	foreach ref [array names loadedFileVis] {
 		if { $loadedFileVis($ref) eq "true" } {
-			incr num_of_trials
+			incr num_of_imgs
 		}
 	}
 
@@ -72,43 +74,38 @@ proc build_zTime_drawing_window {} {
 	pack     $t2.f3.cb2 -side left -anchor nw  -fill x
 
 	#--- frame four (display all maze maps)
-	frame $t2.f4 -width 0 -relief groove -borderwidth 0
-	pack  $t2.f4 -side top -expand 0 -pady 20
+	#calculate the number of frames needed & create them
+	global unrounded
+	set unrounded [expr [expr $num_of_imgs + 0.0] / 5]
+	set numFrames [expr ceil($unrounded)]
+	for {set i 0} {$i < $numFrames} {incr i 1} {
+		global currentNum
+		set currentNum [expr int([expr 4 + $i])]
+		frame $t2.f$currentNum -width 0 -relief groove -borderwidth 0
+		pack  $t2.f$currentNum -side top -expand 0 -pady 20
+	}
 
-	frame $t2.f5 -width 0 -relief groove -borderwidth 0
-	pack  $t2.f5 -side bottom -expand 0 -pady 20
+	set numAdded 0
 
 	foreach ref $orderedNames {
 
 		if { $loadedFileVis($ref) eq "true" } {
 
+			incr numAdded
+
 			set trial $loadedFile_trial($ref)
 			set mazenum $loadedFile_mazenum($ref)
 
-			if { $num_of_trials <= 5} {
+			global unrounded2
+			set unrounded2 [expr [expr $numAdded + 0.0] / 5]
+			global frames
+			set frames [expr ceil($unrounded2)]
+			global frameNum
+			set frameNum [expr int([expr $frames + 3])]
 
-				set drawingWindow($trial$mazenum\_canT)              \
-					[canvas $t2.f4.drawingWindow($trial$mazenum\_canT) \
-							-width $can_width                      \
-							-height $can_height                      ]
-
-			} else {
-
-				if { $trial <= ($num_of_trials / 2) } {
-
-					set drawingWindow($trial$mazenum\_canT) [           \
-						canvas $t2.f4.drawingWindow($trial$mazenum\_canT) \
-							-width $can_width                       \
-							-height $can_height]
-
-				} elseif { $trial > ($num_of_trials / 2) } {
-
-					set drawingWindow($trial$mazenum\_canT) [            \
-						canvas $t2.f5.drawingWindow($trial$mazenum\_canT)  \
-						-width $can_width                          \
-						-height $can_height]
-				}
-			}
+			set drawingWindow($trial$mazenum\_canT)                        \
+				[canvas $t2.f$frameNum.drawingWindow($trial$mazenum\_canT) \
+					-width $can_width -height $can_height]
 
 			pack $drawingWindow($trial$mazenum\_canT) -side left -anchor nw
 		}
@@ -135,16 +132,14 @@ proc build_zDist_drawing_window {} {
 	global currentMaze
 	global can_width
 	global can_height
-	global num_of_trials
+	global num_of_imgs
 	global orderedNames
+	global t3
 
-	set num_of_trials 0
-
+	set num_of_imgs 0
 	foreach ref [array names loadedFileVis] {
-
 		if { $loadedFileVis($ref) eq "true" } {
-
-			incr num_of_trials
+			incr num_of_imgs
 		}
 	}
 
@@ -187,34 +182,40 @@ proc build_zDist_drawing_window {} {
 	ttk::combobox $t3.f3.cb2 -values $combolist -textvar currentMaze
 	pack     $t3.f3.cb2 -side left -anchor nw  -fill x
 
-	#--- frame four (display all maze maps)
-	frame $t3.f4 -width 0 -relief groove -borderwidth 0
-	pack  $t3.f4 -side top -expand 0 -pady 20
 
-	frame $t3.f5 -width 0 -relief groove -borderwidth 0
-	pack  $t3.f5 -side bottom -expand 0 -pady 20
+	#--- frame four (display all maze maps)
+	#calculate the number of frames needed & create them
+	global unrounded
+	set unrounded [expr [expr $num_of_imgs + 0.0] / 5]
+	set numFrames [expr ceil($unrounded)]
+	for {set i 0} {$i < $numFrames} {incr i 1} {
+		global currentNum
+		set currentNum [expr int([expr 4 + $i])]
+		frame $t3.f$currentNum -width 0 -relief groove -borderwidth 0
+		pack  $t3.f$currentNum -side top -expand 0 -pady 20
+	}
+
+	set numAdded 0
 
 	foreach ref $orderedNames {
 
 		if { $loadedFileVis($ref) eq "true" } {
 
+			incr numAdded
+
 			set trial $loadedFile_trial($ref)
 			set mazenum $loadedFile_mazenum($ref)
 
-			if { $num_of_trials <= 5} {
+			global unrounded2
+			set unrounded2 [expr [expr $numAdded + 0.0] / 5]
+			global frames
+			set frames [expr ceil($unrounded2)]
+			global frameNum
+			set frameNum [expr int([expr $frames + 3])]
 
-				set drawingWindow($trial$mazenum\_canD) [            \
-					canvas $t3.f4.drawingWindow($trial$mazenum\_canD)  \
-						-width $can_width -height $can_height      ]
-
-			} else {
-
-				if { $trial <= ($num_of_trials / 2) } {
-					set drawingWindow($trial$mazenum\_canD) [canvas $t3.f4.drawingWindow($trial$mazenum\_canD)  -width $can_width -height $can_height]
-				} elseif { $trial > ($num_of_trials / 2) } {
-					set drawingWindow($trial$mazenum\_canD) [canvas $t3.f5.drawingWindow($trial$mazenum\_canD)  -width $can_width -height $can_height]
-				}
-			}
+			set drawingWindow($trial$mazenum\_canD)                        \
+				[canvas $t3.f$frameNum.drawingWindow($trial$mazenum\_canD) \
+					-width $can_width -height $can_height]
 
 			pack $drawingWindow($trial$mazenum\_canD) -side left -anchor nw
 		}
@@ -239,14 +240,14 @@ proc build_PeskyEff_drawing_window {} {
 	global currentMaze
 	global can_width
 	global can_height
-	global num_of_trials
+	global num_of_imgs
 	global orderedNames
 
 	set num_of_trials 0
 
 	foreach ref [array names loadedFileVis] {
 		if { $loadedFileVis($ref) eq "true" } {
-			incr num_of_trials
+			incr num_of_imgs
 		}
 	}
 
@@ -284,43 +285,38 @@ proc build_PeskyEff_drawing_window {} {
 	pack     $t4.f3.cb2 -side left -anchor nw  -fill x
 
 	#--- frame four (display all maze maps)
-	frame $t4.f4 -width 0 -relief groove -borderwidth 0
-	pack  $t4.f4 -side top -expand 0 -pady 20
+	#calculate the number of frames needed & create them
+	global unrounded
+	set unrounded [expr [expr $num_of_imgs + 0.0] / 5]
+	set numFrames [expr ceil($unrounded)]
+	for {set i 0} {$i < $numFrames} {incr i 1} {
+		global currentNum
+		set currentNum [expr int([expr 4 + $i])]
+		frame $t4.f$currentNum -width 0 -relief groove -borderwidth 0
+		pack  $t4.f$currentNum -side top -expand 0 -pady 20
+	}
 
-	frame $t4.f5 -width 0 -relief groove -borderwidth 0
-	pack  $t4.f5 -side bottom -expand 0 -pady 20
+	set numAdded 0
 
 	foreach ref $orderedNames {
 
 		if { $loadedFileVis($ref) eq "true" } {
 
+			incr numAdded
+
 			set trial $loadedFile_trial($ref)
 			set mazenum $loadedFile_mazenum($ref)
 
-			if { $num_of_trials <= 5} {
+			global unrounded2
+			set unrounded2 [expr [expr $numAdded + 0.0] / 5]
+			global frames
+			set frames [expr ceil($unrounded2)]
+			global frameNum
+			set frameNum [expr int([expr $frames + 3])]
 
-				set drawingWindow($trial$mazenum\_canP) [            \
-					canvas $t4.f4.drawingWindow($trial$mazenum\_canP)  \
-						-width $can_width                        \
-						-height $can_height]
-
-			} else {
-
-				if { $trial <= ($num_of_trials / 2) } {
-
-					set drawingWindow($trial$mazenum\_canP) [            \
-						canvas $t4.f4.drawingWindow($trial$mazenum\_canP)  \
-							-width $can_width                        \
-							-height $can_height]
-
-				} elseif { $trial > ($num_of_trials / 2) } {
-
-					set drawingWindow($trial$mazenum\_canP) [            \
-						canvas $t4.f5.drawingWindow($trial$mazenum\_canP)  \
-							-width $can_width                        \
-							-height $can_height]
-				}
-			}
+			set drawingWindow($trial$mazenum\_canP)                        \
+				[canvas $t4.f$frameNum.drawingWindow($trial$mazenum\_canP) \
+					-width $can_width -height $can_height]
 
 			pack $drawingWindow($trial$mazenum\_canP) -side left -anchor nw
 		}
