@@ -19,7 +19,6 @@ proc build_zTime_drawing_window {} {
 	array set drawingWindow {}
 
 	global fileSaveLocation
-	global currentMaze
 	global can_width
 	global can_height
 	global num_of_imgs
@@ -65,13 +64,6 @@ proc build_zTime_drawing_window {} {
 		-text "refresh drawing"         \
 		-width 20
 	pack   $t2.f3.b1 -side left -anchor nw -fill x
-
-	set combolist  [list                                      \
-		"Maze 1" "Maze 2" "Maze 3" "Maze 4"  "Maze 5"  "Maze 6"  \
-		"Maze 7" "Maze 8" "Maze 9" "Maze 10" "Maze 11" "Maze 12"  ]
-	set currentMaze [lindex $combolist 0 ]
-	ttk::combobox $t2.f3.cb2 -values $combolist -textvar currentMaze
-	pack     $t2.f3.cb2 -side left -anchor nw  -fill x
 
 	#--- frame four (display all maze maps)
 	#calculate the number of frames needed & create them
@@ -163,8 +155,7 @@ proc build_zDist_drawing_window {} {
 	button $t3.f2.b2 -command save_all_drawing -text "save drawing" -width 20
 	pack   $t3.f2.b2 -side left -anchor nw  -fill x
 
-	#--- frame three (refresh button and what maze number
-	#--- the data is from / should be shown)
+	#--- frame three (refresh button and what maze number the data is from / should be shown)
 	frame $t3.f3 -width 0
 	pack  $t3.f3 -side top -anchor nw -fill x
 
@@ -173,14 +164,6 @@ proc build_zDist_drawing_window {} {
 		-text "refresh drawing"       \
 		-width 20
 	pack   $t3.f3.b1 -side left -anchor nw -fill x
-
-	set combolist  [list                                      \
-		"Maze 1" "Maze 2" "Maze 3" "Maze 4"  "Maze 5"  "Maze 6"  \
-		"Maze 7" "Maze 8" "Maze 9" "Maze 10" "Maze 11" "Maze 12"  ]
-	set currentMaze [lindex $combolist 0 ]
-
-	ttk::combobox $t3.f3.cb2 -values $combolist -textvar currentMaze
-	pack     $t3.f3.cb2 -side left -anchor nw  -fill x
 
 
 	#--- frame four (display all maze maps)
@@ -278,11 +261,6 @@ proc build_PeskyEff_drawing_window {} {
 	button $t4.f3.b1 -command refresh_all_drawings -text "refresh drawing" -width 20
 	pack   $t4.f3.b1 -side left -anchor nw -fill x
 
-	set combolist  [list "Maze 1" "Maze 2" "Maze 3" "Maze 4"  "Maze 5"  "Maze 6" \
-	                      "Maze 7" "Maze 8" "Maze 9" "Maze 10" "Maze 11" "Maze 12"  ]
-	set currentMaze [lindex $combolist 0 ]
-	ttk::combobox $t4.f3.cb2 -values $combolist -textvar currentMaze
-	pack     $t4.f3.cb2 -side left -anchor nw  -fill x
 
 	#--- frame four (display all maze maps)
 	#calculate the number of frames needed & create them

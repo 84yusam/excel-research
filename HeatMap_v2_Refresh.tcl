@@ -4,6 +4,7 @@ proc refresh_all_drawings {} {
 	global loadedFile_trial
 	global loadedFile_mazenum
 	global orderedNames
+	global currentMaze
 
 	global canT
 	global canD
@@ -16,36 +17,33 @@ proc refresh_all_drawings {} {
 
 			set trial $loadedFile_trial($ref)
 			set mazenum $loadedFile_mazenum($ref)
+			set currentMaze "Maze [string index $mazenum 4]"
 
 			refresh_drawing $ref $drawingWindow($trial$mazenum\_canT)                 \
-				$trial "drawgrid" "drawouterwalls" "drawinnerwalls" "ztime"
+				$trial "drawgrid" "drawouterwalls" "drawinnerwalls" "ztime" $currentMaze
 			refresh_drawing $ref $drawingWindow($trial$mazenum\_canD)                 \
-				$trial "drawgrid" "drawouterwalls" "drawinnerwalls" "zdist"
+				$trial "drawgrid" "drawouterwalls" "drawinnerwalls" "zdist" $currentMaze
 			refresh_drawing $ref $drawingWindow($trial$mazenum\_canP)                 \
-				$trial "drawgrid" "drawouterwalls" "drawinnerwalls" "pesky_eff"
-
-			#label the images with maze w/ number, not how it is named in file
-			set mazelabel [string index $mazenum 4]
+				$trial "drawgrid" "drawouterwalls" "drawinnerwalls" "pesky_eff" $currentMaze
 
 			$drawingWindow($trial$mazenum\_canT) \
 				create text 150 300        \
-				-text "Maze $mazelabel Trial $trial"       \
+				-text "$currentMaze Trial $trial"       \
 				-anchor nw
 			$drawingWindow($trial$mazenum\_canD) \
 				create text 150 300        \
-				-text "Maze $mazelabel Trial $trial"       \
+				-text "$currentMaze Trial $trial"       \
 				-anchor nw
 			$drawingWindow($trial$mazenum\_canP) \
 				create text 150 300        \
-				-text "Maze $mazelabel Trial $trial"       \
+				-text "$currentMaze Trial $trial"       \
 				-anchor nw
 		}
 	}
 }
 
-proc refresh_drawing {ref can trial item1 item2 item3 item4} {
+proc refresh_drawing {ref can trial item1 item2 item3 item4 mazenum} {
 
-	global currentMaze
 	global loadedFileVis
 	global loadedFile_data
 	global loadedFile_trial
@@ -55,7 +53,7 @@ proc refresh_drawing {ref can trial item1 item2 item3 item4} {
 
 	if { $item1 eq "drawgrid"       } { draw_grid        $can }
 	if { $item2 eq "drawouterwalls" } { draw_outer_walls $can }
-	if { $item3 eq "drawinnerwalls" } { draw_inner_walls $currentMaze $can }
+	if { $item3 eq "drawinnerwalls" } { draw_inner_walls $mazenum $can }
 
 	switch -exact $item4 {
 		"ztime"     { draw_path_ztime  $ref $can $trial }
