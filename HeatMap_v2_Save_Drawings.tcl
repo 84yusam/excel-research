@@ -9,10 +9,13 @@ proc set_drawing_location {} {
   }
 }
 
-proc save_all_drawing {\} {
+proc save_all_drawing {maze trial type cantype} {
 
   global loadedFileVis
   global loadedFile_trial
+  global loadedFile_mazenum
+  global loadedFile_id
+  global loadedFile_type
   global loadedFile_timedata
   global orderedNames
 
@@ -20,25 +23,40 @@ proc save_all_drawing {\} {
   global canD
   global canP
   global drawingWindow
-  global currentMaze
+  global maze_and_trial
 
+  set fileSaveList $maze_and_trial($maze$trial$type)
 
-  foreach ref $orderedNames {
-    if { $loadedFileVis($ref) eq "true" } {
+  foreach ref $fileSaveList {
 
-      set id [lindex [split $ref "-"] 0]
-      set mazenum [lindex [split $ref "-"] 1]
-      set trial [lindex [split $ref "-"] 2]
+    set mazenum $loadedFile_mazenum($ref)
+    set trial   $loadedFile_trial($ref)
+    set type    $loadedFile_type($ref)
+    set id      $loadedFile_id($ref)
 
-      save_drawing $drawingWindow($mazenum$trial$id$type\_canT) "z_time\-$id\-$mazenum\-$trial"
-      save_drawing $drawingWindow($mazenum$trial$id$type\_canD) "z_dist\-$id\-$mazenum\-$trial"
-      save_drawing $drawingWindow($mazenum$trial$id$type\_canP) "Pesky_eff\-$id\-$mazenum\-$trial"
-      #save_drawing $canC                         "Color_Spectrum"
+    if { $cantype eq "canD" } {set zscoretype "z_dist"}
+    if { $cantype eq "canT" } {set zscoretype "z_time"}
+    if { $cantype eq "canP" } {set zscoretype "Pesky_eff"}
 
-    }
+    save_drawing $drawingWindow($mazenum$trial$id$type\_$cantype) "$zscoretype\-$id\-$mazenum\-$trial"
   }
 
-puts "all drawings are saved"
+  # foreach ref $orderedNames {
+    # if { $loadedFileVis($ref) eq "true" } {
+
+      # set id [lindex [split $ref "-"] 0]
+      # set mazenum [lindex [split $ref "-"] 1]
+      # set trial [lindex [split $ref "-"] 2]
+
+      # save_drawing $drawingWindow($mazenum$trial$id$type\_canT) "z_time\-$id\-$mazenum\-$trial"
+      # save_drawing $drawingWindow($mazenum$trial$id$type\_canD) "z_dist\-$id\-$mazenum\-$trial"
+      # save_drawing $drawingWindow($mazenum$trial$id$type\_canP) "Pesky_eff\-$id\-$mazenum\-$trial"
+      # #save_drawing $canC                         "Color_Spectrum"
+
+    # }
+  # }
+
+puts "drawings are saved"
 
 }
 

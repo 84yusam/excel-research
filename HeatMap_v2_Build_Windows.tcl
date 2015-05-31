@@ -74,7 +74,7 @@ proc build_zTime_drawing_window { fileList } {
 		frame $t2.f2 -width 0
 		pack  $t2.f2 -side top -anchor nw -fill x
 
-		button $t2.f2.b2 -command save_all_drawing -text "save drawing" -width 20
+		button $t2.f2.b2 -command [list save_all_drawing $listMaze $listTrial $listType "canT"] -text "save drawing" -width 20
 		pack   $t2.f2.b2 -side left -anchor nw  -fill x
 
 		#--- frame three (refresh button and what maze number the
@@ -193,7 +193,7 @@ proc build_zDist_drawing_window { fileList } {
 		frame $t3.f2 -width 0
 		pack  $t3.f2 -side top -anchor nw -fill x
 
-		button $t3.f2.b2 -command save_all_drawing -text "save drawing" -width 20
+		button $t3.f2.b2 -command [list save_all_drawing $listMaze $listTrial $listType "canD"] -text "save drawing" -width 20
 		pack   $t3.f2.b2 -side left -anchor nw  -fill x
 
 		#--- frame three (refresh button and what maze number the data is from / should be shown)
@@ -308,7 +308,7 @@ proc build_PeskyEff_drawing_window { fileList } {
 		frame $t4.f2 -width 0
 		pack  $t4.f2 -side top -anchor nw -fill x
 
-		button $t4.f2.b2 -command save_all_drawing -text "save drawing" -width 20
+		button $t4.f2.b2 -command [list save_all_drawing $listMaze $listTrial $listType "canP"] -text "save drawing" -width 20
 		pack   $t4.f2.b2 -side left -anchor nw  -fill x
 
 		#--- frame three (refresh button and what maze number the data is from / should be shown)

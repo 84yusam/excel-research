@@ -54,7 +54,7 @@ proc add_data_files { files } {
 
       lappend loadedFiles $fileRef
       incr loadedFileCount
-      set loadedFileVis($fileRef) "true"
+      set loadedFileVis($fileRef) "false"
 
       set dataList [load_data $fullname]
       set loadedFile_data($fileRef)     [lindex $dataList 0]
