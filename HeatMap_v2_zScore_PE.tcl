@@ -8,19 +8,23 @@ proc compute_PE_matrix {} {
 	global yval
 	global loadedFileVis
 	global loadedFile_trial
+	global loadedFile_id
+	global loadedFile_mazenum
 
 	foreach ref [array names loadedFileVis] {
 		if { $loadedFileVis($ref) eq "true" } {
 
 			set trial $loadedFile_trial($ref)
+			set mazenum $loadedFile_mazenum($ref)
+      set id      $loadedFile_id($ref)
 
 			foreach xval [list 0 1 2 3 4 5] {
 				foreach yval [list 0 1 2 3 4 5] {
 
 					if {$sigma_time("$xval\_$yval") != 0} {
 
-						set pesky_eff("$xval\_$yval\_$trial") [expr ($zscore_time("$xval\_$yval\_$trial") + $zscore_dist("$xval\_$yval\_$trial")) /2 ]
-						#puts "The pesky efficiency score for $xval\_$yval\_$trial is $pesky_eff("$xval\_$yval\_$trial")"
+						set pesky_eff("$xval\_$yval\_$mazenum\_$trial\_$id") [expr ($zscore_time("$xval\_$yval\_$mazenum\_$trial\_$id") + $zscore_dist("$xval\_$yval\_$mazenum\_$trial\_$id")) /2 ]
+						#puts "The pesky efficiency score for $xval\_$yval\_$mazenum\_$trial\_$id is $pesky_eff("$xval\_$yval\_$mazenum\_$trial\_$id")"
 					}
 				}
 			}
@@ -29,7 +33,7 @@ proc compute_PE_matrix {} {
 }
 
 
-proc draw_path_PE {reference can trial} {
+proc draw_path_PE {reference can mazenum trial id} {
 
 	compute_PE_matrix
 
@@ -50,10 +54,10 @@ proc draw_path_PE {reference can trial} {
 	global xval
 	global yval
 
-	set prevFiles {} 
+	set prevFiles {}
 
 	set first 1
-  
+
 	foreach {xpos ypos} $loadedFile_data($reference) {
 
 		if {$first} {
@@ -77,8 +81,8 @@ proc draw_path_PE {reference can trial} {
 	foreach xval [list 0 1 2 3 4 5] {
 		foreach yval [list 0 1 2 3 4 5] {
 			if {$sigma_dist("$xval\_$yval") != 0 && $sigma_time("$xval\_$yval") != 0} {
-				if {$pesky_eff("$xval\_$yval\_$trial") > $maxVal} {
-					set maxVal $pesky_eff("$xval\_$yval\_$trial")
+				if {$pesky_eff("$xval\_$yval\_$mazenum\_$trial\_$id") > $maxVal} {
+					set maxVal $pesky_eff("$xval\_$yval\_$mazenum\_$trial\_$id")
 				}
 			}
 		}
@@ -88,8 +92,8 @@ proc draw_path_PE {reference can trial} {
 	foreach xval [list 0 1 2 3 4 5] {
 		foreach yval [list 0 1 2 3 4 5] {
 			if {$sigma_dist("$xval\_$yval") != 0 && $sigma_time("$xval\_$yval") != 0} {
-				if {$pesky_eff("$xval\_$yval\_$trial") < $minVal} {
-					set minVal $pesky_eff("$xval\_$yval\_$trial")
+				if {$pesky_eff("$xval\_$yval\_$mazenum\_$trial\_$id") < $minVal} {
+					set minVal $pesky_eff("$xval\_$yval\_$mazenum\_$trial\_$id")
 				}
 			}
 		}
@@ -107,7 +111,7 @@ proc draw_path_PE {reference can trial} {
 
 	if {$trial == $firstTrial} {
 		set prevFiles $trial
-	} else {   
+	} else {
 
 		foreach ref $orderedNames {
 			if { $loadedFileVis($ref) eq "true" } {
@@ -124,34 +128,34 @@ proc draw_path_PE {reference can trial} {
 			if {$sigma_dist("$xval\_$yval") != 0 &&  \
 			    $sigma_time("$xval\_$yval") != 0       } {
 
-				if { $num_of_trials == 1 } {    
+				if { $num_of_trials == 1 } {
 					set  gridLoc "$xval\_$yval"
-					set  colorVal white   
+					set  colorVal white
 				}
 
-				foreach previousTrial $prevFiles { 
+				foreach previousTrial $prevFiles {
 
-					if {$area_cnt_trial_time("$xval\_$yval\_$previousTrial") != 0 || $area_cnt_trial_time("$xval\_$yval\_$trial") != 0 } { 
+					if {$area_cnt_trial_time("$xval\_$yval\_$mazenum\_$previousTrial\_$id") != 0 || $area_cnt_trial_time("$xval\_$yval\_$mazenum\_$trial\_$id") != 0 } {
 
-						if {$pesky_eff("$xval\_$yval\_$trial") > 0 } {           
+						if {$pesky_eff("$xval\_$yval\_$mazenum\_$trial\_$id") > 0 } {
 							set redVal   65535
-							set greenVal [expr {int( 65535.0 - (1.0 * $pesky_eff("$xval\_$yval\_$trial"))  / $maxVal * 65535.0 )}]
+							set greenVal [expr {int( 65535.0 - (1.0 * $pesky_eff("$xval\_$yval\_$mazenum\_$trial\_$id"))  / $maxVal * 65535.0 )}]
 							set blueVal  29
-							set colorVal [format "#%04x%04x%04x" $redVal $greenVal $blueVal ]       
-							set gridLoc "$xval\_$yval"    
-						} elseif {$pesky_eff("$xval\_$yval\_$trial") < 0} {    
-							set redVal [expr int( 65535 - (abs($pesky_eff("$xval\_$yval\_$trial") / $minVal) * 65535) )]
-							set greenVal [expr int( 65535 - (abs($pesky_eff("$xval\_$yval\_$trial") / $minVal) * 45535) )]
+							set colorVal [format "#%04x%04x%04x" $redVal $greenVal $blueVal ]
+							set gridLoc "$xval\_$yval"
+						} elseif {$pesky_eff("$xval\_$yval\_$mazenum\_$trial\_$id") < 0} {
+							set redVal [expr int( 65535 - (abs($pesky_eff("$xval\_$yval\_$mazenum\_$trial\_$id") / $minVal) * 65535) )]
+							set greenVal [expr int( 65535 - (abs($pesky_eff("$xval\_$yval\_$mazenum\_$trial\_$id") / $minVal) * 45535) )]
 							set blueVal  1000
-							set colorVal [format "#%04x%04x%04x" $redVal $greenVal $blueVal ]     
-							set gridLoc "$xval\_$yval"      
+							set colorVal [format "#%04x%04x%04x" $redVal $greenVal $blueVal ]
+							set gridLoc "$xval\_$yval"
 						} else {
 							set colorVal yellow
-							set gridLoc "$xval\_$yval"   
-						} 
-					} 
+							set gridLoc "$xval\_$yval"
+						}
+					}
 				}
-				
+
 				$can itemconfigure $gridLocName($gridLoc) -fill $colorVal
 			}
 		}

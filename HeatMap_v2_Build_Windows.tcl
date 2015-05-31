@@ -4,18 +4,15 @@ proc build_drawing_windows {} {
 
 	for {set i 1} {$i <= 12} {incr i 1} {
 		for {set j 1} {$j <= 6} {incr j 1} {
-
-			if {[info exists maze_and_trial($i$j)] == 1} {
-				build_zTime_drawing_window $maze_and_trial($i$j)
-				#build_zDist_drawing_window
-				#build_PeskyEff_drawing_window
+			for {set k 1} {$k <= 2} {incr k 1} {
+				if {[info exists maze_and_trial($i$j$k)] == 1} {
+					build_zTime_drawing_window $maze_and_trial($i$j$k)
+					build_zDist_drawing_window $maze_and_trial($i$j$k)
+					build_PeskyEff_drawing_window $maze_and_trial($i$j$k)
+				}
 			}
 		}
 	}
-
-	#build_zTime_drawing_window
-	#build_zDist_drawing_window
-	#build_PeskyEff_drawing_window
 	#build_color_spectrum
 }
 
@@ -26,6 +23,7 @@ proc build_zTime_drawing_window { fileList } {
 	global loadedFile_trial
 	global loadedFile_mazenum
 	global loadedFile_id
+	global loadedFile_type
 	global canT
 	global drawingWindow
 
@@ -42,97 +40,111 @@ proc build_zTime_drawing_window { fileList } {
 	global t2
 	global listMaze
 	global listTrial
+	global listType
+	global visible
 
 	set num_of_imgs 0
+	set visible 0
 	#foreach ref [array names loadedFileVis]
 	foreach ref $fileList {
 		if { $loadedFileVis($ref) eq "true" } {
 			incr num_of_imgs
+			set visible 1
 			set listMaze $loadedFile_mazenum($ref)
 			set listTrial $loadedFile_trial($ref)
+			set listType $loadedFile_type($ref)
 		}
 	}
 
-	toplevel .zTime$listMaze$listTrial
-	wm title .zTime$listMaze$listTrial "Heat Map using z-Scores for Time"
+	if {$visible == 1} {
+		toplevel .zTime$listMaze$listTrial$listType
+		wm title .zTime$listMaze$listTrial$listType "Heat Map using z-Scores for Time -- Maze $listMaze Trial $listTrial"
 
-	set t2 ".zTime$listMaze$listTrial"
+		set t2 ".zTime$listMaze$listTrial$listType"
 
-	#--- frame one (button to source outside files for data)
-	frame $t2.f1 -width 0
-	pack  $t2.f1 -side top -anchor nw -fill x
+		#--- frame one (button to source outside files for data)
+		frame $t2.f1 -width 0
+		pack  $t2.f1 -side top -anchor nw -fill x
 
-	set fileSaveLocation "choose output file location"
-	button $t2.f1.b3 -command set_drawing_location -textvar fileSaveLocation
-	pack   $t2.f1.b3 -side left -anchor nw -fill x -expand 1
+		set fileSaveLocation "choose output file location"
+		button $t2.f1.b3 -command set_drawing_location -textvar fileSaveLocation
+		pack   $t2.f1.b3 -side left -anchor nw -fill x -expand 1
 
-	#--- frame two (button to save drawing)
-	frame $t2.f2 -width 0
-	pack  $t2.f2 -side top -anchor nw -fill x
+		#--- frame two (button to save drawing)
+		frame $t2.f2 -width 0
+		pack  $t2.f2 -side top -anchor nw -fill x
 
-	button $t2.f2.b2 -command save_all_drawing -text "save drawing" -width 20
-	pack   $t2.f2.b2 -side left -anchor nw  -fill x
+		button $t2.f2.b2 -command save_all_drawing -text "save drawing" -width 20
+		pack   $t2.f2.b2 -side left -anchor nw  -fill x
 
-	#--- frame three (refresh button and what maze number the
-	#--- data is from / should be shown)
-	frame $t2.f3 -width 0
-	pack  $t2.f3 -side top -anchor nw -fill x
+		#--- frame three (refresh button and what maze number the
+		#--- data is from / should be shown)
+		frame $t2.f3 -width 0
+		pack  $t2.f3 -side top -anchor nw -fill x
 
-	button $t2.f3.b1                  \
-		-command refresh_all_drawings   \
-		-text "refresh drawing"         \
-		-width 20
-	pack   $t2.f3.b1 -side left -anchor nw -fill x
+		button $t2.f3.b1                  \
+			-command refresh_all_drawings   \
+			-text "refresh drawing"         \
+			-width 20
+		pack   $t2.f3.b1 -side left -anchor nw -fill x
 
-	#--- frame four (display all maze maps)
-	#calculate the number of frames needed & create them
-	global unrounded
-	set unrounded [expr [expr $num_of_imgs + 0.0] / 5]
-	set numFrames [expr ceil($unrounded)]
-	for {set i 0} {$i < $numFrames} {incr i 1} {
-		global currentNum
-		set currentNum [expr int([expr 4 + $i])]
-		frame $t2.f$currentNum -width 0 -relief groove -borderwidth 0
-		pack  $t2.f$currentNum -side top -expand 0 -pady 20
-	}
+		#--- frame four (display all maze maps)
+		#calculate the number of frames needed & create them
+		global unrounded
+		set unrounded [expr [expr $num_of_imgs + 0.0] / 5]
+		set numFrames [expr ceil($unrounded)]
+		for {set i 0} {$i < $numFrames} {incr i 1} {
+			global currentNum
+			set currentNum [expr int([expr 4 + $i])]
+			frame $t2.f$currentNum -width 0 -relief groove -borderwidth 0
+			pack  $t2.f$currentNum -side top -expand 0 -pady 20
+		}
 
-	set numAdded 0
+		set numAdded 0
 
-	# foreach ref $orderedNames
-	foreach ref $fileList {
+		#foreach ref $orderedNames
+		foreach ref $fileList {
+			if { $loadedFileVis($ref) eq "true" } {
 
-		if { $loadedFileVis($ref) eq "true" } {
+				incr numAdded
 
-			incr numAdded
+				set trial   $loadedFile_trial($ref)
+				set mazenum $loadedFile_mazenum($ref)
+				set id      $loadedFile_id($ref)
+				set type    $loadedFile_type($ref)
 
-			set trial   $loadedFile_trial($ref)
-			set mazenum $loadedFile_mazenum($ref)
-			set id      $loadedFile_id($ref)
+				global unrounded2
+				set unrounded2 [expr [expr $numAdded + 0.0] / 5]
+				global frames
+				set frames [expr ceil($unrounded2)]
+				global frameNum
+				set frameNum [expr int([expr $frames + 3])]
 
-			global unrounded2
-			set unrounded2 [expr [expr $numAdded + 0.0] / 5]
-			global frames
-			set frames [expr ceil($unrounded2)]
-			global frameNum
-			set frameNum [expr int([expr $frames + 3])]
+				set drawingWindow($mazenum$trial$id$type\_canT)                        \
+					[canvas $t2.f$frameNum.drawingWindow($mazenum$trial$id$type\_canT) \
+						-width $can_width -height $can_height]
 
-			set drawingWindow($mazenum$trial$id\_canT)                        \
-				[canvas $t2.f$frameNum.drawingWindow($mazenum$trial$id\_canT) \
-					-width $can_width -height $can_height]
+				pack $drawingWindow($mazenum$trial$id$type\_canT) -side left -anchor nw
 
-			pack $drawingWindow($mazenum$trial$id\_canT) -side left -anchor nw
+				#tk_messageBox -message "$drawingWindow($mazenum$trial$id$type\_canT)"
+			}
 		}
 	}
 }
 
-proc build_zDist_drawing_window {} {
+proc build_zDist_drawing_window { fileList } {
 
 	global loadedFileVis
 	global loadedFile_trial
 	global loadedFile_mazenum
 	global loadedFile_id
+	global loadedFile_type
 	global canD
 	global drawingWindow
+	global listMaze
+	global listTrial
+	global listType
+	global visible
 
 	set canD 0
 
@@ -151,91 +163,106 @@ proc build_zDist_drawing_window {} {
 	global t3
 
 	set num_of_imgs 0
-	foreach ref [array names loadedFileVis] {
+	set visible 0
+	#foreach ref [array names loadedFileVis]
+	foreach ref $fileList {
 		if { $loadedFileVis($ref) eq "true" } {
 			incr num_of_imgs
+			set visible 1
+			set listMaze $loadedFile_mazenum($ref)
+			set listTrial $loadedFile_trial($ref)
+			set listType $loadedFile_type($ref)
 		}
 	}
 
-	toplevel .zDist
-	wm title .zDist "Heat Map using z-Scores for Distance"
+	if {$visible == 1} {
+		toplevel .zDist$listMaze$listTrial$listType
+		wm title .zDist$listMaze$listTrial$listType "Heat Map using z-Scores for Distance -- Maze $listMaze Trial $listTrial"
 
-	set t3 ".zDist"
+		set t3 ".zDist$listMaze$listTrial$listType"
 
-	#--- frame one (button to source outside files for data)
-	frame $t3.f1 -width 0
-	pack  $t3.f1 -side top -anchor nw -fill x
+		#--- frame one (button to source outside files for data)
+		frame $t3.f1 -width 0
+		pack  $t3.f1 -side top -anchor nw -fill x
 
-	set fileSaveLocation "choose output file location"
-	button $t3.f1.b3 -command set_drawing_location -textvar fileSaveLocation
-	pack   $t3.f1.b3 -side left -anchor nw -fill x -expand 1
+		set fileSaveLocation "choose output file location"
+		button $t3.f1.b3 -command set_drawing_location -textvar fileSaveLocation
+		pack   $t3.f1.b3 -side left -anchor nw -fill x -expand 1
 
-	#--- frame two (button to save drawing)
-	frame $t3.f2 -width 0
-	pack  $t3.f2 -side top -anchor nw -fill x
+		#--- frame two (button to save drawing)
+		frame $t3.f2 -width 0
+		pack  $t3.f2 -side top -anchor nw -fill x
 
-	button $t3.f2.b2 -command save_all_drawing -text "save drawing" -width 20
-	pack   $t3.f2.b2 -side left -anchor nw  -fill x
+		button $t3.f2.b2 -command save_all_drawing -text "save drawing" -width 20
+		pack   $t3.f2.b2 -side left -anchor nw  -fill x
 
-	#--- frame three (refresh button and what maze number the data is from / should be shown)
-	frame $t3.f3 -width 0
-	pack  $t3.f3 -side top -anchor nw -fill x
+		#--- frame three (refresh button and what maze number the data is from / should be shown)
+		frame $t3.f3 -width 0
+		pack  $t3.f3 -side top -anchor nw -fill x
 
-	button $t3.f3.b1                \
-		-command refresh_all_drawings \
-		-text "refresh drawing"       \
-		-width 20
-	pack   $t3.f3.b1 -side left -anchor nw -fill x
+		button $t3.f3.b1                \
+			-command refresh_all_drawings \
+			-text "refresh drawing"       \
+			-width 20
+		pack   $t3.f3.b1 -side left -anchor nw -fill x
 
 
-	#--- frame four (display all maze maps)
-	#calculate the number of frames needed & create them
-	global unrounded
-	set unrounded [expr [expr $num_of_imgs + 0.0] / 5]
-	set numFrames [expr ceil($unrounded)]
-	for {set i 0} {$i < $numFrames} {incr i 1} {
-		global currentNum
-		set currentNum [expr int([expr 4 + $i])]
-		frame $t3.f$currentNum -width 0 -relief groove -borderwidth 0
-		pack  $t3.f$currentNum -side top -expand 0 -pady 20
-	}
+		#--- frame four (display all maze maps)
+		#calculate the number of frames needed & create them
+		global unrounded
+		set unrounded [expr [expr $num_of_imgs + 0.0] / 5]
+		set numFrames [expr ceil($unrounded)]
+		for {set i 0} {$i < $numFrames} {incr i 1} {
+			global currentNum
+			set currentNum [expr int([expr 4 + $i])]
+			frame $t3.f$currentNum -width 0 -relief groove -borderwidth 0
+			pack  $t3.f$currentNum -side top -expand 0 -pady 20
+		}
 
-	set numAdded 0
+		set numAdded 0
 
-	foreach ref $orderedNames {
+		#foreach ref $orderedNames
+		foreach ref $fileList {
 
-		if { $loadedFileVis($ref) eq "true" } {
+			if { $loadedFileVis($ref) eq "true" } {
 
-			incr numAdded
+				incr numAdded
 
-			set trial   $loadedFile_trial($ref)
-			set mazenum $loadedFile_mazenum($ref)
-			set id      $loadedFile_id($ref)
+				set trial   $loadedFile_trial($ref)
+				set mazenum $loadedFile_mazenum($ref)
+				set id      $loadedFile_id($ref)
+				set type    $loadedFile_type($ref)
 
-			global unrounded2
-			set unrounded2 [expr [expr $numAdded + 0.0] / 5]
-			global frames
-			set frames [expr ceil($unrounded2)]
-			global frameNum
-			set frameNum [expr int([expr $frames + 3])]
+				global unrounded2
+				set unrounded2 [expr [expr $numAdded + 0.0] / 5]
+				global frames
+				set frames [expr ceil($unrounded2)]
+				global frameNum
+				set frameNum [expr int([expr $frames + 3])]
 
-			set drawingWindow($mazenum$trial$id\_canD)                        \
-				[canvas $t3.f$frameNum.drawingWindow($mazenum$trial$id\_canD) \
-					-width $can_width -height $can_height]
+				set drawingWindow($mazenum$trial$id$type\_canD)                        \
+					[canvas $t3.f$frameNum.drawingWindow($mazenum$trial$id$type\_canD) \
+						-width $can_width -height $can_height]
 
-			pack $drawingWindow($mazenum$trial$id\_canD) -side left -anchor nw
+				pack $drawingWindow($mazenum$trial$id$type\_canD) -side left -anchor nw
+			}
 		}
 	}
 }
 
-proc build_PeskyEff_drawing_window {} {
+proc build_PeskyEff_drawing_window { fileList } {
 
 	global loadedFileVis
 	global loadedFile_trial
 	global loadedFile_mazenum
 	global loadedFile_id
+	global loadedFile_type
 	global canP
 	global drawingWindow
+	global listMaze
+	global listTrial
+	global listType
+	global visible
 
 	set canP 0
 	array set drawingWindow {}
@@ -251,77 +278,86 @@ proc build_PeskyEff_drawing_window {} {
 	global orderedNames
 
 	set num_of_trials 0
-
-	foreach ref [array names loadedFileVis] {
+	set visible 0
+	#foreach ref [array names loadedFileVis]
+	foreach ref $fileList {
 		if { $loadedFileVis($ref) eq "true" } {
 			incr num_of_imgs
+			set visible 1
+			set listMaze $loadedFile_mazenum($ref)
+			set listTrial $loadedFile_trial($ref)
+			set listType $loadedFile_type($ref)
 		}
 	}
 
-	toplevel .peskyEff
-	wm title .peskyEff "Heat Map using Pesky Efficiency Scores"
+	if {$visible == 1} {
+		toplevel .peskyEff$listMaze$listTrial$listType
+		wm title .peskyEff$listMaze$listTrial$listType "Heat Map using Pesky Efficiency Scores -- Maze $listMaze Trial $listTrial"
 
-	set t4 ".peskyEff"
+		set t4 ".peskyEff$listMaze$listTrial$listType"
 
-	#--- frame one (button to source outside files for data)
-	frame $t4.f1 -width 0
-	pack  $t4.f1 -side top -anchor nw -fill x
+		#--- frame one (button to source outside files for data)
+		frame $t4.f1 -width 0
+		pack  $t4.f1 -side top -anchor nw -fill x
 
-	set fileSaveLocation "choose output file location"
-	button $t4.f1.b3 -command set_drawing_location -textvar fileSaveLocation
-	pack   $t4.f1.b3 -side left -anchor nw -fill x -expand 1
+		set fileSaveLocation "choose output file location"
+		button $t4.f1.b3 -command set_drawing_location -textvar fileSaveLocation
+		pack   $t4.f1.b3 -side left -anchor nw -fill x -expand 1
 
-	#--- frame two (button to save drawing)
-	frame $t4.f2 -width 0
-	pack  $t4.f2 -side top -anchor nw -fill x
+		#--- frame two (button to save drawing)
+		frame $t4.f2 -width 0
+		pack  $t4.f2 -side top -anchor nw -fill x
 
-	button $t4.f2.b2 -command save_all_drawing -text "save drawing" -width 20
-	pack   $t4.f2.b2 -side left -anchor nw  -fill x
+		button $t4.f2.b2 -command save_all_drawing -text "save drawing" -width 20
+		pack   $t4.f2.b2 -side left -anchor nw  -fill x
 
-	#--- frame three (refresh button and what maze number the data is from / should be shown)
-	frame $t4.f3 -width 0
-	pack  $t4.f3 -side top -anchor nw -fill x
+		#--- frame three (refresh button and what maze number the data is from / should be shown)
+		frame $t4.f3 -width 0
+		pack  $t4.f3 -side top -anchor nw -fill x
 
-	button $t4.f3.b1 -command refresh_all_drawings -text "refresh drawing" -width 20
-	pack   $t4.f3.b1 -side left -anchor nw -fill x
+		button $t4.f3.b1 -command refresh_all_drawings -text "refresh drawing" -width 20
+		pack   $t4.f3.b1 -side left -anchor nw -fill x
 
 
-	#--- frame four (display all maze maps)
-	#calculate the number of frames needed & create them
-	global unrounded
-	set unrounded [expr [expr $num_of_imgs + 0.0] / 5]
-	set numFrames [expr ceil($unrounded)]
-	for {set i 0} {$i < $numFrames} {incr i 1} {
-		global currentNum
-		set currentNum [expr int([expr 4 + $i])]
-		frame $t4.f$currentNum -width 0 -relief groove -borderwidth 0
-		pack  $t4.f$currentNum -side top -expand 0 -pady 20
-	}
+		#--- frame four (display all maze maps)
+		#calculate the number of frames needed & create them
+		global unrounded
+		set unrounded [expr [expr $num_of_imgs + 0.0] / 5]
+		set numFrames [expr ceil($unrounded)]
+		for {set i 0} {$i < $numFrames} {incr i 1} {
+			global currentNum
+			set currentNum [expr int([expr 4 + $i])]
+			frame $t4.f$currentNum -width 0 -relief groove -borderwidth 0
+			pack  $t4.f$currentNum -side top -expand 0 -pady 20
+		}
 
-	set numAdded 0
+		set numAdded 0
 
-	foreach ref $orderedNames {
+		#foreach ref $orderedNames
+		foreach ref $fileList {
 
-		if { $loadedFileVis($ref) eq "true" } {
+			if { $loadedFileVis($ref) eq "true" } {
 
-			incr numAdded
+				incr numAdded
 
-			set trial   $loadedFile_trial($ref)
-			set mazenum $loadedFile_mazenum($ref)
-			set id      $loadedFile_id($ref)
+				set trial   $loadedFile_trial($ref)
+				set mazenum $loadedFile_mazenum($ref)
+				set id      $loadedFile_id($ref)
+				set type    $loadedFile_type($ref)
 
-			global unrounded2
-			set unrounded2 [expr [expr $numAdded + 0.0] / 5]
-			global frames
-			set frames [expr ceil($unrounded2)]
-			global frameNum
-			set frameNum [expr int([expr $frames + 3])]
+				global unrounded2
+				set unrounded2 [expr [expr $numAdded + 0.0] / 5]
+				global frames
+				set frames [expr ceil($unrounded2)]
+				global frameNum
+				set frameNum [expr int([expr $frames + 3])]
 
-			set drawingWindow($mazenum$trial$id\_canP)                        \
-				[canvas $t4.f$frameNum.drawingWindow($mazenum$trial$id\_canP) \
-					-width $can_width -height $can_height]
+				set drawingWindow($mazenum$trial$id$type\_canP)                        \
+					[canvas $t4.f$frameNum.drawingWindow($mazenum$trial$id$type\_canP) \
+						-width $can_width -height $can_height]
 
-			pack $drawingWindow($mazenum$trial$id\_canP) -side left -anchor nw
+				pack $drawingWindow($mazenum$trial$id$type\_canP) -side left -anchor nw
+			}
 		}
 	}
 }

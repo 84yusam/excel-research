@@ -9,7 +9,7 @@ proc set_drawing_location {} {
   }
 }
 
-proc save_all_drawing {} {
+proc save_all_drawing {\} {
 
   global loadedFileVis
   global loadedFile_trial
@@ -30,9 +30,9 @@ proc save_all_drawing {} {
       set mazenum [lindex [split $ref "-"] 1]
       set trial [lindex [split $ref "-"] 2]
 
-      save_drawing $drawingWindow($mazenum$trial$id\_canT) "z_time\-$id\-$mazenum\-$trial"
-      save_drawing $drawingWindow($mazenum$trial$id\_canD) "z_dist\-$id\-$mazenum\-$trial"
-      save_drawing $drawingWindow($mazenum$trial$id\_canP) "Pesky_eff\-$id\-$mazenum\-$trial"
+      save_drawing $drawingWindow($mazenum$trial$id$type\_canT) "z_time\-$id\-$mazenum\-$trial"
+      save_drawing $drawingWindow($mazenum$trial$id$type\_canD) "z_dist\-$id\-$mazenum\-$trial"
+      save_drawing $drawingWindow($mazenum$trial$id$type\_canP) "Pesky_eff\-$id\-$mazenum\-$trial"
       #save_drawing $canC                         "Color_Spectrum"
 
     }

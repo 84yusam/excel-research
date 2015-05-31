@@ -1,8 +1,10 @@
 proc compute_data_dist_matrix {} {
-  
+
 	global loadedFileVis
 	global loadedFile_timedata
 	global loadedFile_trial
+  global loadedFile_mazenum
+  global loadedFile_id
 	global originalSize
 	global originalGridSize
 	global gridLocName
@@ -10,7 +12,7 @@ proc compute_data_dist_matrix {} {
 	global area_cnt_trial_dist
 	global xpos
 	global ypos
-	global prevXPos 
+	global prevXPos
 	global prevYPos
 
 	set prevXPos 0
@@ -19,15 +21,17 @@ proc compute_data_dist_matrix {} {
 	foreach ref [array names loadedFileVis] {
 		if { $loadedFileVis($ref) eq "true" } {
 
-			set trial $loadedFile_trial($ref)
+			set trial   $loadedFile_trial($ref)
+      set mazenum $loadedFile_mazenum($ref)
+      set id      $loadedFile_id($ref)
 
 			foreach xval [list 0 1 2 3 4 5] {
 				foreach yval [list 0 1 2 3 4 5] {
-					set area_cnt_trial_dist("$xval\_$yval\_$trial") 0
+					set area_cnt_trial_dist("$xval\_$yval\_$mazenum\_$trial\_$id") 0
 				}
 			}
 
-			foreach item $loadedFile_timedata($ref) { 
+			foreach item $loadedFile_timedata($ref) {
 				set xpos [lindex $item 0]
 				set ypos [lindex $item 1]
 				set trial [lindex $item 3]
@@ -40,7 +44,7 @@ proc compute_data_dist_matrix {} {
 
 				set xval [expr int(($originalSize - $xpos) / $originalGridSize) ]
 				set yval [expr int(($originalSize - $ypos) / $originalGridSize) ]
-				set area_cnt_trial_dist("$xval\_$yval\_$trial") [expr $area_cnt_trial_dist("$xval\_$yval\_$trial") + $distance]
+				set area_cnt_trial_dist("$xval\_$yval\_$mazenum\_$trial\_$id") [expr $area_cnt_trial_dist("$xval\_$yval\_$mazenum\_$trial\_$id") + $distance]
 			}
 
 		}
@@ -49,14 +53,11 @@ proc compute_data_dist_matrix {} {
 	foreach ref [array names loadedFileVis] {
 
 		if { $loadedFileVis($ref) eq "true" } {
-
-			set trial $loadedFile_trial($ref)
-   
 			foreach xval [list 0 1 2 3 4 5] {
 				foreach yval [list 0 1 2 3 4 5] {
 
-					if {$area_cnt_trial_dist("$xval\_$yval\_$trial") != 0} {
-						#puts "$xval\_$yval\_$trial   >> distance is $area_cnt_trial_dist("$xval\_$yval\_$trial") <<"
+					if {$area_cnt_trial_dist("$xval\_$yval\_$mazenum\_$trial\_$id") != 0} {
+						#puts "$xval\_$yval\_$mazenum\_$trial\_$id   >> distance is $area_cnt_trial_dist("$xval\_$yval\_$mazenum\_$trial\_$id") <<"
 					}
 				}
 			}
@@ -64,10 +65,12 @@ proc compute_data_dist_matrix {} {
 	}
 }
 
-proc compute_average_dist_matrix {} { 
+proc compute_average_dist_matrix {} {
 
 	global loadedFileVis
 	global loadedFile_trial
+  global loadedFile_mazenum
+  global loadedFile_id
 	global area_cnt_trial_dist
 	global area_cnt_total_dist
 	global dbar
@@ -83,19 +86,23 @@ proc compute_average_dist_matrix {} {
 			incr num_of_trials
 		}
 	}
-    
+
 	foreach xval [list 0 1 2 3 4 5] {
 		foreach yval [list 0 1 2 3 4 5] {
 
-			set area_cnt_total_dist("$xval\_$yval") 0 
+			set area_cnt_total_dist("$xval\_$yval") 0
 
 			foreach ref [array names loadedFileVis] {
 
 				if { $loadedFileVis($ref) eq "true" } {
-					set trial $loadedFile_trial($ref)
+
+          set trial   $loadedFile_trial($ref)
+          set mazenum $loadedFile_mazenum($ref)
+          set id      $loadedFile_id($ref)
+
 					set area_cnt_total_dist("$xval\_$yval") [expr \
 						$area_cnt_total_dist("$xval\_$yval") +      \
-						$area_cnt_trial_dist("$xval\_$yval\_$trial")]
+						$area_cnt_trial_dist("$xval\_$yval\_$mazenum\_$trial\_$id")]
 				}
 			}
 
@@ -123,6 +130,8 @@ proc compute_squares_dist_matrix {} {
 	global yval
 
 	global loadedFile_trial
+  global loadedFile_mazenum
+  global loadedFile_id
 	global loadedFileVis
 
 	foreach ref [array names loadedFileVis] {
@@ -130,17 +139,19 @@ proc compute_squares_dist_matrix {} {
 		if { $loadedFileVis($ref) eq "true" } {
 
 			set trial $loadedFile_trial($ref)
+      set mazenum $loadedFile_mazenum($ref)
+      set id      $loadedFile_id($ref)
 
 			foreach xval [list 0 1 2 3 4 5] {
 
 				foreach yval [list 0 1 2 3 4 5] {
 
-					set squares_dist("$xval\_$yval\_$trial") [expr {      \
-						pow ($area_cnt_trial_dist("$xval\_$yval\_$trial") - \
+					set squares_dist("$xval\_$yval\_$mazenum\_$trial\_$id") [expr {      \
+						pow ($area_cnt_trial_dist("$xval\_$yval\_$mazenum\_$trial\_$id") - \
 						$dbar("$xval\_$yval"), 2)}]
 
 					if {$area_cnt_total_dist("$xval\_$yval") != 0} {
-						#puts "$xval\_$yval\_$trial   >> squares are $squares_dist("$xval\_$yval\_$trial") <<"
+						#puts "$xval\_$yval\_$mazenum\_$trial\_$id   >> squares are $squares_dist("$xval\_$yval\_$mazenum\_$trial\_$id") <<"
 					}
 				}
 			}
@@ -160,6 +171,8 @@ proc compute_sigma_dist_matrix {} {
 	global yval
 
 	global loadedFile_trial
+  global loadedFile_mazenum
+  global loadedFile_id
 	global loadedFileVis
 
 	foreach xval [list 0 1 2 3 4 5] {
@@ -169,10 +182,14 @@ proc compute_sigma_dist_matrix {} {
 
 			foreach ref [array names loadedFileVis] {
 				if { $loadedFileVis($ref) eq "true" } {
+
 					set trial $loadedFile_trial($ref)
+          set mazenum $loadedFile_mazenum($ref)
+          set id      $loadedFile_id($ref)
+
 					set sum_of_dist_squares("$xval\_$yval") [ expr \
 						$sum_of_dist_squares("$xval\_$yval") +       \
-						$squares_dist("$xval\_$yval\_$trial") ]
+						$squares_dist("$xval\_$yval\_$mazenum\_$trial\_$id") ]
 				}
 			}
 
@@ -198,20 +215,24 @@ proc compute_zscore_dist {} {
 
 	global loadedFileVis
 	global loadedFile_trial
+  global loadedFile_mazenum
+  global loadedFile_id
 
 	foreach ref [array names loadedFileVis] {
 		if { $loadedFileVis($ref) eq "true" } {
 
 			set trial $loadedFile_trial($ref)
-	
+      set mazenum $loadedFile_mazenum($ref)
+      set id      $loadedFile_id($ref)
+
 			foreach xval [list 0 1 2 3 4 5] {
 				foreach yval [list 0 1 2 3 4 5] {
 
 					if {$sigma_dist("$xval\_$yval") != 0} {
-						set zscore_dist("$xval\_$yval\_$trial") [expr          \
-							($area_cnt_trial_dist("$xval\_$yval\_$trial") -      \
+						set zscore_dist("$xval\_$yval\_$mazenum\_$trial\_$id") [expr          \
+							($area_cnt_trial_dist("$xval\_$yval\_$mazenum\_$trial\_$id") -      \
 							$dbar("$xval\_$yval")) / $sigma_dist("$xval\_$yval")   ]
-						#puts "$xval\_$yval\_$trial   > zscore is $zscore_dist("$xval\_$yval\_$trial") <"
+						#puts "$xval\_$yval\_$mazenum\_$trial\_$id   > zscore is $zscore_dist("$xval\_$yval\_$mazenum\_$trial\_$id") <"
 					}
 				}
 			}
@@ -219,11 +240,11 @@ proc compute_zscore_dist {} {
 	}
 }
 
-proc draw_path_zdist {reference can trial} {
-  
+proc draw_path_zdist {reference can mazenum trial id} {
+
 	compute_data_dist_matrix
 	compute_average_dist_matrix
-	compute_squares_dist_matrix 
+	compute_squares_dist_matrix
 	compute_sigma_dist_matrix
 	compute_zscore_dist
 
@@ -232,7 +253,7 @@ proc draw_path_zdist {reference can trial} {
 	global originalSize
 	global originalGridSize
 	global gridLocName
-    
+
 	global area_cnt_trial_dist
 	global zscore_dist
 	global sigma_dist
@@ -264,8 +285,8 @@ proc draw_path_zdist {reference can trial} {
 	foreach xval [list 0 1 2 3 4 5] {
 		foreach yval [list 0 1 2 3 4 5] {
 			if {$sigma_dist("$xval\_$yval") != 0} {
-				if {$zscore_dist("$xval\_$yval\_$trial") > $maxDistVal} {
-					set maxDistVal $zscore_dist("$xval\_$yval\_$trial")
+				if {$zscore_dist("$xval\_$yval\_$mazenum\_$trial\_$id") > $maxDistVal} {
+					set maxDistVal $zscore_dist("$xval\_$yval\_$mazenum\_$trial\_$id")
 				}
 			}
 		}
@@ -275,8 +296,8 @@ proc draw_path_zdist {reference can trial} {
 	foreach xval [list 0 1 2 3 4 5] {
 		foreach yval [list 0 1 2 3 4 5] {
 			if {$sigma_dist("$xval\_$yval") != 0} {
-				if {$zscore_dist("$xval\_$yval\_$trial") < $minDistVal} {
-					set minDistVal $zscore_dist("$xval\_$yval\_$trial")
+				if {$zscore_dist("$xval\_$yval\_$mazenum\_$trial\_$id") < $minDistVal} {
+					set minDistVal $zscore_dist("$xval\_$yval\_$mazenum\_$trial\_$id")
 				}
 			}
 		}
@@ -285,31 +306,31 @@ proc draw_path_zdist {reference can trial} {
 	foreach xval [list 0 1 2 3 4 5] {
 		foreach yval [list 0 1 2 3 4 5] {
 
-			if { $area_cnt_trial_dist("$xval\_$yval\_$trial") == 0 || $num_of_trials == 1 } {
+			if { $area_cnt_trial_dist("$xval\_$yval\_$mazenum\_$trial\_$id") == 0 || $num_of_trials == 1 } {
 
 				set  gridLoc "$xval\_$yval"
 				$can itemconfigure $gridLocName($gridLoc) -fill white
 
-			} elseif {  $zscore_dist("$xval\_$yval\_$trial") == 0 } {
+			} elseif {  $zscore_dist("$xval\_$yval\_$mazenum\_$trial\_$id") == 0 } {
 
 				set  gridLoc "$xval\_$yval"
 				$can itemconfigure $gridLocName($gridLoc) -fill yellow
 
-			} elseif {$zscore_dist("$xval\_$yval\_$trial") > 0} {      
+			} elseif {$zscore_dist("$xval\_$yval\_$mazenum\_$trial\_$id") > 0} {
 
 				set redVal   65535
-				set greenVal [expr {int( 65535.0 - (1.0 * $zscore_dist("$xval\_$yval\_$trial"))  / $maxDistVal * 65535.0 )}]
+				set greenVal [expr {int( 65535.0 - (1.0 * $zscore_dist("$xval\_$yval\_$mazenum\_$trial\_$id"))  / $maxDistVal * 65535.0 )}]
 				set blueVal  29
-				set colorVal [format "#%04x%04x%04x" $redVal $greenVal $blueVal ]     
+				set colorVal [format "#%04x%04x%04x" $redVal $greenVal $blueVal ]
 				set gridLoc  "$xval\_$yval"
-				$can itemconfigure $gridLocName($gridLoc) -fill $colorVal    
+				$can itemconfigure $gridLocName($gridLoc) -fill $colorVal
 
-			} elseif {$zscore_dist("$xval\_$yval\_$trial") < 0} {    
+			} elseif {$zscore_dist("$xval\_$yval\_$mazenum\_$trial\_$id") < 0} {
 
-				set redVal   [expr int( 65535 - (abs($zscore_dist("$xval\_$yval\_$trial") / $minDistVal) * 65535) )]
-				set greenVal [expr int( 65535 - (abs($zscore_dist("$xval\_$yval\_$trial") / $minDistVal) * 45535) )]
+				set redVal   [expr int( 65535 - (abs($zscore_dist("$xval\_$yval\_$mazenum\_$trial\_$id") / $minDistVal) * 65535) )]
+				set greenVal [expr int( 65535 - (abs($zscore_dist("$xval\_$yval\_$mazenum\_$trial\_$id") / $minDistVal) * 45535) )]
 				set blueVal  1000
-				set colorVal [format "#%04x%04x%04x" $redVal $greenVal $blueVal ]     
+				set colorVal [format "#%04x%04x%04x" $redVal $greenVal $blueVal ]
 				set gridLoc  "$xval\_$yval"
 				$can itemconfigure $gridLocName($gridLoc) -fill $colorVal
 
@@ -317,7 +338,7 @@ proc draw_path_zdist {reference can trial} {
 
 				set  gridLoc "$xval\_$yval"
 				$can itemconfigure $gridLocName($gridLoc) -fill white
-			} 
+			}
 		}
 	}
 }

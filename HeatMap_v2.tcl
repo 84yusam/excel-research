@@ -18,9 +18,9 @@ foreach ref [array names loadedFileVis] {
     set trial   $loadedFile_trial($ref)
     set mazenum $loadedFile_mazenum($ref)
     set id      $loadedFile_id($ref)
-    set drawingWindow($mazenum$trial$id\_canT) 0
-    set drawingWindow($mazenum$trial$id\_canD) 0
-    set drawingWindow($mazenum$trial$id\_canP) 0
+    set drawingWindow($mazenum$trial$id$type\_canT) 0
+    set drawingWindow($mazenum$trial$id$type\_canD) 0
+    set drawingWindow($mazenum$trial$id$type\_canP) 0
   }
 }
 

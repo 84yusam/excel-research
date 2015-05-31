@@ -27,6 +27,7 @@ proc add_data_files { files } {
   global loadedFile_trial
   global loadedFile_mazenum
   global loadedFile_id
+  global loadedFile_type
   global fileRef
   global treeview
   global parent
@@ -62,14 +63,15 @@ proc add_data_files { files } {
       set loadedFile_mazenum($fileRef)  [lindex $dataList 3]
       set loadedFile_id($fileRef)       [lindex $dataList 4]
 
+      set loadedFile_type($fileRef) [string index $loadedFile_id($fileRef) end]
+
       #checks if a list for that maze and trial exists. If so, adds file to list. If not, creates the list.
-      if {[info exists maze_and_trial($loadedFile_mazenum($fileRef)$loadedFile_trial($fileRef))] == 1} {
-        lappend maze_and_trial($loadedFile_mazenum($fileRef)$loadedFile_trial($fileRef)) $fileRef
+      if {[info exists maze_and_trial($loadedFile_mazenum($fileRef)$loadedFile_trial($fileRef)$loadedFile_type($fileRef))] == 1} {
+        lappend maze_and_trial($loadedFile_mazenum($fileRef)$loadedFile_trial($fileRef)$loadedFile_type($fileRef)) $fileRef
       } else {
-        set maze_and_trial($loadedFile_mazenum($fileRef)$loadedFile_trial($fileRef)) [list $fileRef]
+        set maze_and_trial($loadedFile_mazenum($fileRef)$loadedFile_trial($fileRef)$loadedFile_type($fileRef)) [list $fileRef]
       }
     }
-
   }
 
 }

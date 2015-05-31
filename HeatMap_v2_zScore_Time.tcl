@@ -3,6 +3,8 @@ proc compute_data_time_matrix { can } {
 	global loadedFileVis
 	global loadedFile_timedata
 	global loadedFile_trial
+	global loadedFile_mazenum
+	global loadedFile_id
 	global originalSize
 	global originalGridSize
 	global gridLocName
@@ -20,10 +22,12 @@ proc compute_data_time_matrix { can } {
 		if { $loadedFileVis($ref) eq "true" } {
 
 			set trial $loadedFile_trial($ref)
+			set mazenum $loadedFile_mazenum($ref)
+      set id      $loadedFile_id($ref)
 
 			foreach xval [list 0 1 2 3 4 5] {
 				foreach yval [list 0 1 2 3 4 5] {
-					set area_cnt_trial_time("$xval\_$yval\_$trial") 0
+					set area_cnt_trial_time("$xval\_$yval\_$mazenum\_$trial\_$id") 0
 				}
 			}
 
@@ -58,7 +62,7 @@ proc compute_data_time_matrix { can } {
 				set xval [expr int(($originalSize - $xpos) / $originalGridSize) ]
 				set yval [expr int(($originalSize - $ypos) / $originalGridSize) ]
 
-				set area_cnt_trial_time("$xval\_$yval\_$trial") [expr {$area_cnt_trial_time("$xval\_$yval\_$trial") + $timeDiff}]
+				set area_cnt_trial_time("$xval\_$yval\_$mazenum\_$trial\_$id") [expr {$area_cnt_trial_time("$xval\_$yval\_$mazenum\_$trial\_$id") + $timeDiff}]
 			}
 		}
 	}
@@ -66,14 +70,11 @@ proc compute_data_time_matrix { can } {
 	foreach ref [array names loadedFileVis] {
 
 		if { $loadedFileVis($ref) eq "true" } {
-
-			set trial $loadedFile_trial($ref)
-
 			foreach xval [list 0 1 2 3 4 5] {
 				foreach yval [list 0 1 2 3 4 5] {
 
-					if {$area_cnt_trial_time("$xval\_$yval\_$trial") != 0} {
-						#puts "$xval\_$yval\_$trial   >> $area_cnt_trial_time("$xval\_$yval\_$trial") <<"
+					if {$area_cnt_trial_time("$xval\_$yval\_$mazenum\_$trial\_$id") != 0} {
+						#puts "$xval\_$yval\_$mazenum\_$trial\_$id   >> $area_cnt_trial_time("$xval\_$yval\_$mazenum\_$trial\_$id") <<"
 					}
 				}
 			}
@@ -92,6 +93,8 @@ proc compute_average_time_matrix {} {
 
 	global loadedFileVis
 	global loadedFile_trial
+	global loadedFile_mazenum
+	global loadedFile_id
 
 	set num_of_trials 0
 	foreach ref [array names loadedFileVis] {
@@ -106,8 +109,12 @@ proc compute_average_time_matrix {} {
 
 			foreach ref [array names loadedFileVis] {
 				if { $loadedFileVis($ref) eq "true" } {
+
 					set trial $loadedFile_trial($ref)
-					set area_cnt_total_time("$xval\_$yval") [expr $area_cnt_total_time("$xval\_$yval") + $area_cnt_trial_time("$xval\_$yval\_$trial")]
+					set mazenum $loadedFile_mazenum($ref)
+		      set id      $loadedFile_id($ref)
+
+					set area_cnt_total_time("$xval\_$yval") [expr $area_cnt_total_time("$xval\_$yval") + $area_cnt_trial_time("$xval\_$yval\_$mazenum\_$trial\_$id")]
 				}
 			}
 		}
@@ -138,6 +145,8 @@ proc compute_squares_time_matrix {} {
 	global yval
 
 	global loadedFile_trial
+	global loadedFile_mazenum
+	global loadedFile_id
 	global loadedFileVis
 
 	foreach ref [array names loadedFileVis] {
@@ -145,16 +154,18 @@ proc compute_squares_time_matrix {} {
 		if { $loadedFileVis($ref) eq "true" } {
 
 			set trial $loadedFile_trial($ref)
+			set mazenum $loadedFile_mazenum($ref)
+      set id      $loadedFile_id($ref)
 
 			foreach xval [list 0 1 2 3 4 5] {
 				foreach yval [list 0 1 2 3 4 5] {
 
-					set squares_time("$xval\_$yval\_$trial") [expr {      \
-						pow ($area_cnt_trial_time("$xval\_$yval\_$trial") - \
+					set squares_time("$xval\_$yval\_$mazenum\_$trial\_$id") [expr {      \
+						pow ($area_cnt_trial_time("$xval\_$yval\_$mazenum\_$trial\_$id") - \
 						$tbar("$xval\_$yval"), 2)}]
 
 					if {$area_cnt_total_time("$xval\_$yval") != 0} {
-						#puts "$xval\_$yval\_$trial  >>> squares are $squares_time("$xval\_$yval\_$trial") <<<"
+						#puts "$xval\_$yval\_$mazenum\_$trial\_$id  >>> squares are $squares_time("$xval\_$yval\_$mazenum\_$trial\_$id") <<<"
 					}
 				}
 			}
@@ -173,6 +184,8 @@ proc compute_sigma_time_matrix {} {
 	global xval
 	global yval
 	global loadedFile_trial
+	global loadedFile_mazenum
+	global loadedFile_id
 	global loadedFileVis
 
 	foreach xval [list 0 1 2 3 4 5] {
@@ -182,15 +195,19 @@ proc compute_sigma_time_matrix {} {
 
 			foreach ref [array names loadedFileVis] {
 				if { $loadedFileVis($ref) eq "true" } {
+
 					set trial $loadedFile_trial($ref)
-					set sum_of_time_squares("$xval\_$yval") [ expr $sum_of_time_squares("$xval\_$yval") + $squares_time("$xval\_$yval\_$trial")]
+					set mazenum $loadedFile_mazenum($ref)
+		      set id      $loadedFile_id($ref)
+
+					set sum_of_time_squares("$xval\_$yval") [ expr $sum_of_time_squares("$xval\_$yval") + $squares_time("$xval\_$yval\_$mazenum\_$trial\_$id")]
 				}
 			}
 
 			set sigma_time("$xval\_$yval") [expr {sqrt($sum_of_time_squares("$xval\_$yval") / $num_of_trials)}]
 
 			if {$tbar("$xval\_$yval") != 0} {
-				#puts "$xval\_$yval\_$trial   >> sum of squares is $sum_of_time_squares("$xval\_$yval") <<     >>>> sigma is $sigma_time("$xval\_$yval") <<<<"
+				#puts "$xval\_$yval\_$mazenum\_$trial\_$id   >> sum of squares is $sum_of_time_squares("$xval\_$yval") <<     >>>> sigma is $sigma_time("$xval\_$yval") <<<<"
 			}
 
 		}
@@ -207,6 +224,8 @@ proc compute_zscore_time {} {
 	global xval
 	global yval
 	global loadedFile_trial
+	global loadedFile_mazenum
+	global loadedFile_id
 	global loadedFileVis
 
 	foreach xval [list 0 1 2 3 4 5] {
@@ -214,13 +233,16 @@ proc compute_zscore_time {} {
 
 			foreach ref [array names loadedFileVis] {
 				if { $loadedFileVis($ref) eq "true" } {
+
 					set trial $loadedFile_trial($ref)
+					set mazenum $loadedFile_mazenum($ref)
+		      set id      $loadedFile_id($ref)
 
 					if {$sigma_time("$xval\_$yval") != 0} {
-						set zscore_time("$xval\_$yval\_$trial") [expr ($area_cnt_trial_time("$xval\_$yval\_$trial") - $tbar("$xval\_$yval")) / $sigma_time("$xval\_$yval")]
-						#puts "$xval\_$yval\_$trial   > zscore is $zscore_time("$xval\_$yval\_$trial") <"
+						set zscore_time("$xval\_$yval\_$mazenum\_$trial\_$id") [expr ($area_cnt_trial_time("$xval\_$yval\_$mazenum\_$trial\_$id") - $tbar("$xval\_$yval")) / $sigma_time("$xval\_$yval")]
+						#puts "$xval\_$yval\_$mazenum\_$trial\_$id   > zscore is $zscore_time("$xval\_$yval\_$mazenum\_$trial\_$id") <"
 					} else {
-						set zscore_time("$xval\_$yval\_$trial") 0
+						set zscore_time("$xval\_$yval\_$mazenum\_$trial\_$id") 0
 					}
 				}
 			}
@@ -228,7 +250,7 @@ proc compute_zscore_time {} {
 	}
 }
 
-proc draw_path_ztime {reference can trial} {
+proc draw_path_ztime {reference can mazenum trial id} {
 
 	compute_data_time_matrix $can
 	compute_average_time_matrix
@@ -272,8 +294,8 @@ proc draw_path_ztime {reference can trial} {
 	foreach xval [list 0 1 2 3 4 5] {
 		foreach yval [list 0 1 2 3 4 5] {
 			if {$sigma_time("$xval\_$yval") != 0} {
-				if {$zscore_time("$xval\_$yval\_$trial") > $maxTimeVal} {
-					set maxTimeVal $zscore_time("$xval\_$yval\_$trial")
+				if {$zscore_time("$xval\_$yval\_$mazenum\_$trial\_$id") > $maxTimeVal} {
+					set maxTimeVal $zscore_time("$xval\_$yval\_$mazenum\_$trial\_$id")
 				}
 			}
 		}
@@ -283,8 +305,8 @@ proc draw_path_ztime {reference can trial} {
 	foreach xval [list 0 1 2 3 4 5] {
 		foreach yval [list 0 1 2 3 4 5] {
 			if {$sigma_time("$xval\_$yval") != 0} {
-				if {$zscore_time("$xval\_$yval\_$trial") < $minTimeVal} {
-					set minTimeVal $zscore_time("$xval\_$yval\_$trial")
+				if {$zscore_time("$xval\_$yval\_$mazenum\_$trial\_$id") < $minTimeVal} {
+					set minTimeVal $zscore_time("$xval\_$yval\_$mazenum\_$trial\_$id")
 				}
 			}
 		}
@@ -293,22 +315,22 @@ proc draw_path_ztime {reference can trial} {
 	foreach xval [list 0 1 2 3 4 5] {
 		foreach yval [list 0 1 2 3 4 5] {
 
-			if { $area_cnt_trial_time("$xval\_$yval\_$trial") == 0 || $num_of_trials == 1} {
+			if { $area_cnt_trial_time("$xval\_$yval\_$mazenum\_$trial\_$id") == 0 || $num_of_trials == 1} {
 				set  gridLoc "$xval\_$yval"
 				$can itemconfigure $gridLocName($gridLoc) -fill white
-			} elseif {  $zscore_time("$xval\_$yval\_$trial") == 0 } {
+			} elseif {  $zscore_time("$xval\_$yval\_$mazenum\_$trial\_$id") == 0 } {
 				set  gridLoc "$xval\_$yval"
 				$can itemconfigure $gridLocName($gridLoc) -fill yellow
-			} elseif {$zscore_time("$xval\_$yval\_$trial") > 0} {
+			} elseif {$zscore_time("$xval\_$yval\_$mazenum\_$trial\_$id") > 0} {
 				set redVal   65535
-				set greenVal [expr {int( 65535.0 - (1.0 * $zscore_time("$xval\_$yval\_$trial"))  / $maxTimeVal * 65535.0 )}]
+				set greenVal [expr {int( 65535.0 - (1.0 * $zscore_time("$xval\_$yval\_$mazenum\_$trial\_$id"))  / $maxTimeVal * 65535.0 )}]
 				set blueVal  29
 				set colorVal [format "#%04x%04x%04x" $redVal $greenVal $blueVal ]
 				set gridLoc "$xval\_$yval"
 				$can itemconfigure $gridLocName($gridLoc) -fill $colorVal
-			} elseif {$zscore_time("$xval\_$yval\_$trial") < 0} {
-				set redVal   [expr int( 65535 - (abs($zscore_time("$xval\_$yval\_$trial") / $minTimeVal) * 65535) )]
-				set greenVal [expr int( 65535 - (abs($zscore_time("$xval\_$yval\_$trial") / $minTimeVal) * 45535) )]
+			} elseif {$zscore_time("$xval\_$yval\_$mazenum\_$trial\_$id") < 0} {
+				set redVal   [expr int( 65535 - (abs($zscore_time("$xval\_$yval\_$mazenum\_$trial\_$id") / $minTimeVal) * 65535) )]
+				set greenVal [expr int( 65535 - (abs($zscore_time("$xval\_$yval\_$mazenum\_$trial\_$id") / $minTimeVal) * 45535) )]
 				set blueVal  1000
 				set colorVal [format "#%04x%04x%04x" $redVal $greenVal $blueVal ]
 				set gridLoc "$xval\_$yval"
