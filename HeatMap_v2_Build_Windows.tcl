@@ -1,13 +1,26 @@
 proc build_drawing_windows {} {
 
-	build_zTime_drawing_window
-	build_zDist_drawing_window
-	build_PeskyEff_drawing_window
+	global maze_and_trial
+
+	for {set i 1} {$i <= 12} {incr i 1} {
+		for {set j 1} {$j <= 6} {incr j 1} {
+
+			if {[info exists maze_and_trial($i$j)] == 1} {
+				build_zTime_drawing_window $maze_and_trial($i$j)
+				#build_zDist_drawing_window
+				#build_PeskyEff_drawing_window
+			}
+		}
+	}
+
+	#build_zTime_drawing_window
+	#build_zDist_drawing_window
+	#build_PeskyEff_drawing_window
 	#build_color_spectrum
 }
 
 
-proc build_zTime_drawing_window {} {
+proc build_zTime_drawing_window { fileList } {
 
 	global loadedFileVis
 	global loadedFile_trial
@@ -27,18 +40,23 @@ proc build_zTime_drawing_window {} {
 	global orderedNames
 	global numFrames
 	global t2
+	global listMaze
+	global listTrial
 
 	set num_of_imgs 0
-	foreach ref [array names loadedFileVis] {
+	#foreach ref [array names loadedFileVis]
+	foreach ref $fileList {
 		if { $loadedFileVis($ref) eq "true" } {
 			incr num_of_imgs
+			set listMaze $loadedFile_mazenum($ref)
+			set listTrial $loadedFile_trial($ref)
 		}
 	}
 
-	toplevel .zTime
-	wm title .zTime "Heat Map using z-Scores for Time"
+	toplevel .zTime$listMaze$listTrial
+	wm title .zTime$listMaze$listTrial "Heat Map using z-Scores for Time"
 
-	set t2 ".zTime"
+	set t2 ".zTime$listMaze$listTrial"
 
 	#--- frame one (button to source outside files for data)
 	frame $t2.f1 -width 0
@@ -80,7 +98,8 @@ proc build_zTime_drawing_window {} {
 
 	set numAdded 0
 
-	foreach ref $orderedNames {
+	# foreach ref $orderedNames
+	foreach ref $fileList {
 
 		if { $loadedFileVis($ref) eq "true" } {
 

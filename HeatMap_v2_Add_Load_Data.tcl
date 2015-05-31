@@ -3,6 +3,8 @@ proc load_folders {} {
   global fileList
   global treeview
   global parent
+  global loadedFile_trial
+  global loadedFile_mazenum
 
   #have the user choose a folder and extract the files from the folder
   set directory [tk_chooseDirectory -mustexist 1 -title "Choose a folder."]
@@ -28,6 +30,7 @@ proc add_data_files { files } {
   global fileRef
   global treeview
   global parent
+  global maze_and_trial
 
   global fileList
   global orderedFiles
@@ -58,6 +61,13 @@ proc add_data_files { files } {
       set loadedFile_trial($fileRef)    [lindex $dataList 2]
       set loadedFile_mazenum($fileRef)  [lindex $dataList 3]
       set loadedFile_id($fileRef)       [lindex $dataList 4]
+
+      #checks if a list for that maze and trial exists. If so, adds file to list. If not, creates the list.
+      if {[info exists maze_and_trial($loadedFile_mazenum($fileRef)$loadedFile_trial($fileRef))] == 1} {
+        lappend maze_and_trial($loadedFile_mazenum($fileRef)$loadedFile_trial($fileRef)) $fileRef
+      } else {
+        set maze_and_trial($loadedFile_mazenum($fileRef)$loadedFile_trial($fileRef)) [list $fileRef]
+      }
     }
 
   }
@@ -80,8 +90,13 @@ proc load_data { filename } {
   set trial   [lindex [split $filename "-"] 2]
   set mazenum [lindex [split $filename "-"] 1]
   #set mazenum to be just the number, not the word 'maze'
-  set mazenum [string index $mazenum 4]
 
+  if {[string length $mazenum] == 5} {
+    set mazenum [string index $mazenum 4]
+  }
+  if {[string length $mazenum] == 6} {
+    set mazenum [string range $mazenum 4 5]
+  }
 
   #create a new id number that will not have periods and includes atypical vs. typical ending
   set temp [lindex [split $filename "_"] 2]
