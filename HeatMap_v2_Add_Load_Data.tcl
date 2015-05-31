@@ -11,7 +11,7 @@ proc load_folders {} {
   set fileList [glob -directory $directory *.txt]
 
   #add the directory to the treeview
-  set parent [$treeview insert {} 0 -text $directory]
+  set parent [$treeview insert {} 0 -text $directory -tag $directory]
 
   add_data_files fileList
 }
@@ -49,7 +49,7 @@ proc add_data_files { files } {
 
       set fileRef $fileName
       set refvalue [$treeview insert $parent 0 -text $fileName -tag $fileRef]
-      $treeview set $refvalue visible "true"
+      $treeview set $refvalue visible "false"
       $treeview tag bind $fileRef <ButtonPress> "toggle_hiding $fileRef $refvalue"
 
       lappend loadedFiles $fileRef

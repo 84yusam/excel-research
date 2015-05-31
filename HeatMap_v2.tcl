@@ -136,7 +136,7 @@ proc build_main_window {} {
   pack  .f2 -side top -anchor nw  -fill both -expand 1
 
   # Inserted at the root, program chooses id:
-  set treeview [ttk::treeview .f2.tree -columns "visible"]
+  set treeview [ttk::treeview .f2.tree -columns "visible" -height 30]
   $treeview heading visible  -text "Visible"
 
   $treeview column #0 -width 500 -stretch 1
