@@ -58,7 +58,7 @@ proc build_zTime_drawing_window { fileList } {
 
 	if {$visible == 1} {
 		toplevel .zTime$listMaze$listTrial$listType
-		wm title .zTime$listMaze$listTrial$listType "Heat Map using z-Scores for Time -- Maze $listMaze Trial $listTrial"
+		wm title .zTime$listMaze$listTrial$listType "Time -- Maze $listMaze Trial $listTrial"
 
 		set t2 ".zTime$listMaze$listTrial$listType"
 
@@ -177,7 +177,7 @@ proc build_zDist_drawing_window { fileList } {
 
 	if {$visible == 1} {
 		toplevel .zDist$listMaze$listTrial$listType
-		wm title .zDist$listMaze$listTrial$listType "Heat Map using z-Scores for Distance -- Maze $listMaze Trial $listTrial"
+		wm title .zDist$listMaze$listTrial$listType "Distance -- Maze $listMaze Trial $listTrial"
 
 		set t3 ".zDist$listMaze$listTrial$listType"
 
@@ -292,7 +292,7 @@ proc build_PeskyEff_drawing_window { fileList } {
 
 	if {$visible == 1} {
 		toplevel .peskyEff$listMaze$listTrial$listType
-		wm title .peskyEff$listMaze$listTrial$listType "Heat Map using Pesky Efficiency Scores -- Maze $listMaze Trial $listTrial"
+		wm title .peskyEff$listMaze$listTrial$listType "Pesky Efficiency -- Maze $listMaze Trial $listTrial"
 
 		set t4 ".peskyEff$listMaze$listTrial$listType"
 
