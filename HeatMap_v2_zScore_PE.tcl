@@ -45,6 +45,7 @@ proc draw_path_PE {reference can mazenum trial id} {
 	global loadedFileVis
 	global loadedFile_trial
 	global orderedNames
+	global gridLoc
 
 	global pesky_eff
 	global area_cnt_trial_time

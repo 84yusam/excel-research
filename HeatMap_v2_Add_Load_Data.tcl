@@ -32,6 +32,8 @@ proc add_data_files { files } {
   global treeview
   global parent
   global maze_and_trial
+  global allLists
+  global refvalue
 
   global fileList
   global orderedFiles
@@ -48,9 +50,9 @@ proc add_data_files { files } {
       lappend orderedNames $fileName
 
       set fileRef $fileName
-      set refvalue [$treeview insert $parent 0 -text $fileName -tag $fileRef]
-      $treeview set $refvalue visible "false"
-      $treeview tag bind $fileRef <ButtonPress> "toggle_hiding $fileRef $refvalue"
+      set refvalue($fileRef) [$treeview insert $parent 0 -text $fileName -tag $fileRef]
+      $treeview set $refvalue($fileRef) visible "false"
+      $treeview tag bind $fileRef <ButtonPress> "toggle_hiding $fileRef $refvalue($fileRef)"
 
       lappend loadedFiles $fileRef
       incr loadedFileCount
@@ -70,10 +72,38 @@ proc add_data_files { files } {
         lappend maze_and_trial($loadedFile_mazenum($fileRef)$loadedFile_trial($fileRef)$loadedFile_type($fileRef)) $fileRef
       } else {
         set maze_and_trial($loadedFile_mazenum($fileRef)$loadedFile_trial($fileRef)$loadedFile_type($fileRef)) [list $fileRef]
+        lappend allLists "maze_and_trial($loadedFile_mazenum($fileRef)$loadedFile_trial($fileRef)$loadedFile_type($fileRef))"
       }
     }
   }
+  load_listbox $allLists
+}
 
+proc load_listbox { allLists } {
+
+  global listbox_maze
+  global listbox_trial
+  global listbox_type
+  global optionsList
+
+  $optionsList delete 0 end
+
+  set orderedList [lsort -increasing $allLists]
+
+  foreach item $orderedList {
+    if {[string length $item] == 19} {
+      set maze [string index $item 15]
+      set trial [string index $item 16]
+      set type [string index $item 17]
+    }
+    if {[string length $item] == 20} {
+      set maze [string range $item 15 16]
+      set trial [string index $item 17]
+      set type [string index $item 18]
+    }
+
+    $optionsList insert end "Maze $maze Trial $trial Type $type"
+  }
 }
 
 #loads data into maps, taking note of times,dates, and positions as displayed in name

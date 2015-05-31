@@ -122,6 +122,10 @@ proc build_main_window {} {
   global toggle1
   global treeview
   global currentMaze
+  global optionsList
+  global allLists
+
+  set allLists [list]
 
   #name of data sourcing window
   wm title . "HeatMaps Data"
@@ -136,7 +140,7 @@ proc build_main_window {} {
   pack  .f2 -side top -anchor nw  -fill both -expand 1
 
   # Inserted at the root, program chooses id:
-  set treeview [ttk::treeview .f2.tree -columns "visible" -height 30]
+  set treeview [ttk::treeview .f2.tree -columns "visible" -height 20]
   $treeview heading visible  -text "Visible"
 
   $treeview column #0 -width 500 -stretch 1
@@ -148,6 +152,43 @@ proc build_main_window {} {
   button .f3.b1 -command build_drawing_windows -text "Build Heat Map Windows" -width 50
   pack   .f3.b1 -side bottom -anchor nw -fill x -expand 1
 
+  frame .flb -width 0 -height 300
+  pack .flb -side bottom -anchor sw -fill both -expand 1
+  listbox .flb.lb -selectmode multiple -height 0 -width 0 -activestyle none
+  set optionsList ".flb.lb"
+  pack $optionsList -side left -anchor sw -fill both -expand 1
+  scrollbar $optionsList.sb -command [list .flb.lb yview] -width 10
+  $optionsList configure -yscrollcommand [list $optionsList.sb set]
+  pack $optionsList.sb -side right -anchor ne -fill y -expand 1
+  bind $optionsList <<ListboxSelect>> [list listbox_change $optionsList]
+}
+
+proc listbox_change { optionsList } {
+
+  global maze_and_trial
+  global orderedNames
+  global treeview
+  global refvalue
+  global loadedFileVis
+
+  foreach reference $orderedNames {
+    $treeview set $refvalue($reference) visible "false"
+    set loadedFileVis($reference) "false"
+  }
+
+  foreach index [$optionsList curselection] {
+
+    set option [$optionsList get $index]
+
+    set maze  [lindex $option 1]
+    set trial [lindex $option 3]
+    set type  [lindex $option 5]
+
+    foreach ref $maze_and_trial($maze$trial$type) {
+      $treeview set $refvalue($ref) visible "true"
+      set loadedFileVis($ref) "true"
+    }
+  }
 
 }
 
