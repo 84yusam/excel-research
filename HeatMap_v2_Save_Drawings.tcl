@@ -56,7 +56,7 @@ proc save_all_drawing {maze trial type cantype} {
     # }
   # }
 
-puts "drawings are saved"
+tk_messageBox -message "Drawing Saved"
 
 }
 
