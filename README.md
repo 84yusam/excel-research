@@ -1,4 +1,4 @@
 # excel-research
 Summer 2015 Excel Research
 
-v2 files are Rachel's most up-to-date files. v5 files are older but contain a working save button.
+v3 files are written by Professor Pfaffmann. Requires AW1 to be in the directory above in order to load data.
