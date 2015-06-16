@@ -7,6 +7,9 @@ wm title . "Heat Map Generator"
 #-- create the source and destination frames
 global sourceText
 global destText
+global numDirectories
+
+set numDirectories 0
 
 frame .f1 -width 0
 pack  .f1 -side top -anchor nw  -fill x -expand 0
@@ -32,14 +35,13 @@ pack .f2.t1 -side left -anchor nw
 proc set_source {} {
   global directory
   global sourceText
+  global numDirectories
   set directory [tk_chooseDirectory -mustexist 1 -title "Choose a source."]
-  if {$sourceText eq "Source: "} {
-    $sourceText insert end $directory
-  } else {
-    $sourceText insert end ", $directory"
-  }
+  #-- the num of directories increases by 2 because for each directory there are 2 frames
+  incr numDirectories 2
+    $sourceText insert end "$directory "
   iterate_dir $directory
-  create_central_frame
+  create_central_frame $numDirectories
 }
 
 proc set_destination {} {
@@ -49,47 +51,47 @@ proc set_destination {} {
   $destText insert end "Destination: $destination"
 }
 
-proc create_central_frame {} {
+proc create_central_frame { frameNum } {
   global directory
   global visible
+  #-- because each directory has two frames, the frame names must be based on the given num and by adding one
+  set childFrame [expr $frameNum + 1]
 
-  frame .f3 -width 0
-  pack  .f3 -side top -anchor nw -fill x -expand 0
+  frame .cf$frameNum -width 0
+  pack  .cf$frameNum -side top -anchor nw -fill x -expand 0
 
-  button .f3.plus -text "+" -width 0 -command "toggle_hiding notDefined"
-  pack  .f3.plus -side left -anchor nw -expand 0
+  button .cf$frameNum.plus -text "+" -width 0 -command "toggle_hiding notDefined"
+  pack  .cf$frameNum.plus -side left -anchor nw -expand 0
 
   set filePath [split $directory "/"]
   set length [llength $filePath]
   set folder [lindex $filePath [expr $length - 1]]
-  text .f3.t1 -height 1 -width [string length $folder]
-  .f3.t1 delete 1.0 end
-  .f3.t1 insert end $folder
-  pack .f3.t1 -side left -anchor nw
+  text .cf$frameNum.t1 -height 1 -width [string length $folder]
+  .cf$frameNum.t1 delete 1.0 end
+  .cf$frameNum.t1 insert end $folder
+  pack .cf$frameNum.t1 -side left -anchor nw
 
-  #button .f3.plus -text "+" -width 0 -command "toggle_hiding notDefined"
-  #pack  .f3.plus -side left -anchor nw -expand 0
+  frame .cf$childFrame -width 0
+  pack  .cf$childFrame -side top -anchor nw -fill x -expand 0
 
-  frame .f4 -width 0
-  pack  .f4 -side top -anchor nw -fill x -expand 0
-
-  labelframe .f4.typical -width 0 -text "Typical"
-  pack       .f4.typical -side left -padx 25 -anchor nw -fill x -expand 0
-  labelframe .f4.atypical -width 0 -text "Atypical"
-  pack       .f4.atypical -side left -anchor nw -fill x -expand 0
-  set visible(.f4) "true"
+  labelframe .cf$childFrame.typical -width 0 -text "Typical"
+  pack       .cf$childFrame.typical -side left -padx 25 -anchor nw -fill x -expand 0
+  labelframe .cf$childFrame.atypical -width 0 -text "Atypical"
+  pack       .cf$childFrame.atypical -side left -anchor nw -fill x -expand 0
+  set visible(.cf$childFrame) "true"
 
   #-- TEMPORARY
-  button .f4.typical.tmp -width 25 -text "here"
-  pack .f4.typical.tmp -side left -anchor nw -fill x -expand 0
-  button .f4.atypical.tmp -width 25 -text "here"
-  pack .f4.atypical.tmp -side left -anchor nw -fill x -expand 0
+  button .cf$childFrame.typical.tmp -width 25 -text "here $childFrame"
+  pack .cf$childFrame.typical.tmp -side left -anchor nw -fill x -expand 0
+  button .cf$childFrame.atypical.tmp -width 25 -text "here $childFrame"
+  pack .cf$childFrame.atypical.tmp -side left -anchor nw -fill x -expand 0
 
-  .f3.plus configure -command "toggle_hiding .f4"
+  .cf$frameNum.plus configure -command "toggle_hiding .cf$childFrame"
 }
 
 proc toggle_hiding {thing_to_hide} {
   global visible
+  global numDirectories
   if {$thing_to_hide eq "notDefined"} {
     tk_messageBox -message "Button not configure."
   } else {
@@ -98,6 +100,15 @@ proc toggle_hiding {thing_to_hide} {
       set visible($thing_to_hide) "false"
     } else {
       pack $thing_to_hide -side top -anchor nw -fill x -expand 0
+      if {$numDirectories > 2} {
+        for {set i $numDirectories} {$i > 0} {incr i -2} {
+          if {".cf[expr $i - 1]" eq $thing_to_hide} {
+            raise $thing_to_hide .cf$i
+            tk_messageBox -message "Raised $thing_to_hide above .cf$i"
+            break
+          }
+        }
+      }
       set visible($thing_to_hide) "true"
     }
   }
