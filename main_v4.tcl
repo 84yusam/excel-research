@@ -1,6 +1,7 @@
 package require Tk
 
-source LoadDataSample.tcl
+source load_data_v4.tcl
+source build_window_v4.tcl
 
 wm title . "Heat Map Generator"
 
@@ -31,6 +32,9 @@ set destText [text .f2.t1 -height 1]
 .f2.t1 insert end "Destination:"
 pack .f2.t1 -side left -anchor nw
 
+frame .f3 -width 0
+pack .f3 -side top -anchor nw -fill x -expand 0
+
 #-- when the user sets the source, create body frame and iterate through files
 proc set_source {} {
   global directory
@@ -51,49 +55,50 @@ proc set_destination {} {
   $destText insert end "Destination: $destination"
 }
 
+#-- creates two frames for each directory, one w/ name and one w/ files within
 proc create_central_frame { frameNum } {
   global directory
   global visible
   #-- because each directory has two frames, the frame names must be based on the given num and by adding one
   set childFrame [expr $frameNum + 1]
 
-  frame .cf$frameNum -width 0
-  pack  .cf$frameNum -side top -anchor nw -fill x -expand 0
+  frame .f3.cf$frameNum -width 0
+  pack  .f3.cf$frameNum -side top -anchor nw -fill x -expand 0
 
-  button .cf$frameNum.plus -text "+" -width 0 -command "toggle_hiding notDefined"
-  pack  .cf$frameNum.plus -side left -anchor nw -expand 0
+  button .f3.cf$frameNum.plus -text "+" -width 0 -command "toggle_hiding notDefined"
+  pack  .f3.cf$frameNum.plus -side left -anchor nw -expand 0
 
   set filePath [split $directory "/"]
   set length [llength $filePath]
   set folder [lindex $filePath [expr $length - 1]]
-  text .cf$frameNum.t1 -height 1 -width [string length $folder]
-  .cf$frameNum.t1 delete 1.0 end
-  .cf$frameNum.t1 insert end $folder
-  pack .cf$frameNum.t1 -side left -anchor nw
+  text .f3.cf$frameNum.t1 -height 1 -width [string length $folder]
+  .f3.cf$frameNum.t1 delete 1.0 end
+  .f3.cf$frameNum.t1 insert end $folder
+  pack .f3.cf$frameNum.t1 -side left -anchor nw
 
-  frame .cf$childFrame -width 0
-  pack  .cf$childFrame -side top -anchor nw -fill x -expand 0
+  frame .f3.cf$childFrame -width 0
+  pack  .f3.cf$childFrame -side top -anchor nw -fill x -expand 0
 
-  labelframe .cf$childFrame.typical -width 0 -text "Typical"
-  pack       .cf$childFrame.typical -side left -padx 25 -anchor nw -fill x -expand 0
-  labelframe .cf$childFrame.atypical -width 0 -text "Atypical"
-  pack       .cf$childFrame.atypical -side left -anchor nw -fill x -expand 0
-  set visible(.cf$childFrame) "true"
+  labelframe .f3.cf$childFrame.typical -width 0 -text "Typical"
+  pack       .f3.cf$childFrame.typical -side left -padx 25 -anchor nw -fill x -expand 0
+  labelframe .f3.cf$childFrame.atypical -width 0 -text "Atypical"
+  pack       .f3.cf$childFrame.atypical -side left -anchor nw -fill x -expand 0
+  set visible(.f3.cf$childFrame) "true"
 
   #-- TEMPORARY
-  button .cf$childFrame.typical.tmp -width 25 -text "here $childFrame"
-  pack .cf$childFrame.typical.tmp -side left -anchor nw -fill x -expand 0
-  button .cf$childFrame.atypical.tmp -width 25 -text "here $childFrame"
-  pack .cf$childFrame.atypical.tmp -side left -anchor nw -fill x -expand 0
+  button .f3.cf$childFrame.typical.tmp -width 25 -text "here $childFrame"
+  pack .f3.cf$childFrame.typical.tmp -side left -anchor nw -fill x -expand 0
+  button .f3.cf$childFrame.atypical.tmp -width 25 -text "here $childFrame"
+  pack .f3.cf$childFrame.atypical.tmp -side left -anchor nw -fill x -expand 0
 
-  .cf$frameNum.plus configure -command "toggle_hiding .cf$childFrame"
+  .f3.cf$frameNum.plus configure -command "toggle_hiding .f3.cf$childFrame"
 }
 
 proc toggle_hiding {thing_to_hide} {
   global visible
   global numDirectories
   if {$thing_to_hide eq "notDefined"} {
-    tk_messageBox -message "Button not configure."
+    tk_messageBox -message "Button not configured."
   } else {
     if {$visible($thing_to_hide) eq "true"} {
       pack forget $thing_to_hide
@@ -102,9 +107,9 @@ proc toggle_hiding {thing_to_hide} {
       pack $thing_to_hide -side top -anchor nw -fill x -expand 0
       if {$numDirectories > 2} {
         for {set i $numDirectories} {$i > 0} {incr i -2} {
-          if {".cf[expr $i - 1]" eq $thing_to_hide} {
-            raise $thing_to_hide .cf$i
-            tk_messageBox -message "Raised $thing_to_hide above .cf$i"
+          if {".f3.cf[expr $i - 1]" eq $thing_to_hide} {
+            raise $thing_to_hide .f3.cf$i
+            tk_messageBox -message "Raised $thing_to_hide above .f3.cf$i"
             break
           }
         }
