@@ -7,28 +7,34 @@ proc iterate_dir { dir } {
   set contents [glob -directory $dir *]
   foreach item $contents {
     if {[file isdirectory $item] == 1} {
-      lappend $folderList $item
+      lappend folderList $item
     }
   }
+  tk_messageBox -message $folderList
   separate_type $dir $folderList
 }
 
 #--separate list of directory folders into typical and atypical
 proc separate_type { dir folderList } {
-  global id_atypical
-  global id_typical
+ global id_atypical
+ global id_typical
+ global foldername
 
-  set id_atypical($dir) {}
-  set id_typical($dir) {}
+ set id_atypical($dir) {}
+ set id_typical($dir) {}
 
-  foreach item $folderList {
-    set type [lindex [split $item _] 2]
-    if {$type eq 1} {
-      lappend $id_typical($dir) $item
-    } else {
-      lappend $id_atypical($dir) $item
-    }
-  }
+ foreach item $folderList {
+   set type [lindex [split $item _] 2]
+   set tmp [split $item /]
+   set foldername($item) [lindex $tmp [expr [llength $tmp] - 1]]
+   if {$type == 1} {
+     lappend id_typical($dir) $foldername($item)
+   } else {
+     lappend id_atypical($dir) $foldername($item)
+   }
+ }
+
+ list_ids $dir $id_atypical($dir) $id_typical($dir)
 }
 
 # loads data into maps, taking note of times,dates, and

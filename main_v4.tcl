@@ -25,7 +25,7 @@ button .f2.b2 -text "Set Destination" -width 25 -command set_destination
 pack   .f2.b2 -side left -anchor nw
 
 set sourceText [text .f1.t1 -height 1]
-.f1.t1 insert end "Source:"
+.f1.t1 insert end "Source: "
 pack .f1.t1 -side left -anchor nw
 
 set destText [text .f2.t1 -height 1]
@@ -41,11 +41,12 @@ proc set_source {} {
   global sourceText
   global numDirectories
   set directory [tk_chooseDirectory -mustexist 1 -title "Choose a source."]
+  set shortenedDir [file tail $directory]
   #-- the num of directories increases by 2 because for each directory there are 2 frames
   incr numDirectories 2
-    $sourceText insert end "$directory "
-  iterate_dir $directory
+    $sourceText insert end "$shortenedDir "
   create_central_frame $numDirectories
+  iterate_dir $directory
 }
 
 proc set_destination {} {
@@ -59,6 +60,8 @@ proc set_destination {} {
 proc create_central_frame { frameNum } {
   global directory
   global visible
+  global lastDir
+
   #-- because each directory has two frames, the frame names must be based on the given num and by adding one
   set childFrame [expr $frameNum + 1]
 
@@ -85,13 +88,10 @@ proc create_central_frame { frameNum } {
   pack       .f3.cf$childFrame.atypical -side left -anchor nw -fill x -expand 0
   set visible(.f3.cf$childFrame) "true"
 
-  #-- TEMPORARY
-  button .f3.cf$childFrame.typical.tmp -width 25 -text "here $childFrame"
-  pack .f3.cf$childFrame.typical.tmp -side left -anchor nw -fill x -expand 0
-  button .f3.cf$childFrame.atypical.tmp -width 25 -text "here $childFrame"
-  pack .f3.cf$childFrame.atypical.tmp -side left -anchor nw -fill x -expand 0
-
   .f3.cf$frameNum.plus configure -command "toggle_hiding .f3.cf$childFrame"
+
+  #--allows you to make the list for typical and atypical based on the last dir loaded
+  set lastDir ".f3.cf$childFrame"
 }
 
 proc toggle_hiding {thing_to_hide} {
@@ -117,6 +117,48 @@ proc toggle_hiding {thing_to_hide} {
       set visible($thing_to_hide) "true"
     }
   }
+}
 
-
+#-- for each ID within the list, create a frame within its parent directory
+proc list_ids { dir atypicalList typicalList } {
+  global lastDir
+  global id
+  #-- TYPICAL LIST
+  foreach item $typicalList {
+    set id($item) {}
+    set temp [split $item _]
+    set idparts {}
+    foreach part $temp {
+      lappend idparts [split $part .]
+    }
+    foreach part $idparts {
+      lappend id($item) $part
+    }
+    frame  $lastDir.typical.$id($item) -width 0
+    pack   $lastDir.typical.$id($item) -side top -anchor nw -fill x -expand 0
+    button $lastDir.typical.$id($item).plus -text "+" -width 0
+    pack   $lastDir.typical.$id($item).plus -side left -anchor nw -fill x -expand 0
+    text   $lastDir.typical.$id($item).txt -height 1 -width 25
+    pack   $lastDir.typical.$id($item).txt -side left -anchor nw -fill x -expand 0
+           $lastDir.typical.$id($item).txt insert end $item
+  }
+  #-- ATYPICAL LIST
+  foreach item $atypicalList {
+    set id($item) {}
+    set temp [split $item _]
+    set idparts {}
+    foreach part $temp {
+      lappend idparts [split $part .]
+    }
+    foreach part $idparts {
+      lappend id($item) $part
+    }
+    frame  $lastDir.atypical.$id($item) -width 0
+    pack   $lastDir.atypical.$id($item) -side top -anchor nw -fill x -expand 0
+    button $lastDir.atypical.$id($item).plus -text "+" -width 0
+    pack   $lastDir.atypical.$id($item).plus -side left -anchor nw -fill x -expand 0
+    text   $lastDir.atypical.$id($item).txt -height 1 -width 25
+    pack   $lastDir.atypical.$id($item).txt -side left -anchor nw -fill x -expand 0
+           $lastDir.atypical.$id($item).txt insert end $item
+  }
 }
