@@ -1,4 +1,37 @@
-# loads data into maps, taking note of times,dates, and  
+#--identify all folders within the directory
+proc iterate_dir { dir } {
+
+  global folderList
+
+  set folderList {}
+  set contents [glob -directory $dir *]
+  foreach item $contents {
+    if {[file isdirectory $item] == 1} {
+      lappend $folderList $item
+    }
+  }
+  separate_type $dir $folderList
+}
+
+#--separate list of directory folders into typical and atypical
+proc separate_type { dir folderList } {
+  global id_atypical
+  global id_typical
+
+  set id_atypical($dir) {}
+  set id_typical($dir) {}
+
+  foreach item $folderList {
+    set type [lindex [split $item _] 2]
+    if {$type eq 1} {
+      lappend $id_typical($dir) $item
+    } else {
+      lappend $id_atypical($dir) $item
+    }
+  }
+}
+
+# loads data into maps, taking note of times,dates, and
 # positions as displayed in name
 proc load_data { filename } {
 
