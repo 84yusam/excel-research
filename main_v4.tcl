@@ -2,6 +2,7 @@ package require Tk
 
 source load_data_v4.tcl
 source build_window_v4.tcl
+source directory_tools_v4.tcl
 
 wm title . "Heat Map Generator"
 
@@ -160,5 +161,27 @@ proc list_ids { dir atypicalList typicalList } {
     text   $lastDir.atypical.$id($item).txt -height 1 -width 25
     pack   $lastDir.atypical.$id($item).txt -side left -anchor nw -fill x -expand 0
            $lastDir.atypical.$id($item).txt insert end $item
+  }
+}
+
+proc list_mazes { folder frame } {
+
+  global current_maze_dir
+
+  set contents [glob -directory $folder *]
+  foreach item $contents {
+    if {[file isdirectory $item] == 1} {
+      set logs $item
+    }
+  }
+  set curr_maze "first_time"
+
+  if {split_data_file $folder} {
+    #-- if there is a new maze
+    if {$current_maze_dir(maze) ne $curr_maze} {
+
+    } else {
+
+    }
   }
 }
