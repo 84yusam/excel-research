@@ -124,49 +124,58 @@ proc toggle_hiding {thing_to_hide} {
 proc list_ids { dir atypicalList typicalList } {
   global lastDir
   global id
+  global foldername
+
   #-- TYPICAL LIST
   foreach item $typicalList {
-    set id($item) {}
-    set temp [split $item _]
+    set tmp [split $item /]
+    set foldername($item) [lindex $tmp [expr [llength $tmp] - 1]]
+    set id($foldername($item)) {}
+    set temp [split $foldername($item) _]
     set idparts {}
     foreach part $temp {
       lappend idparts [split $part .]
     }
     foreach part $idparts {
-      lappend id($item) $part
+      lappend id($foldername($item)) $part
     }
-    frame  $lastDir.typical.$id($item) -width 0
-    pack   $lastDir.typical.$id($item) -side top -anchor nw -fill x -expand 0
-    button $lastDir.typical.$id($item).plus -text "+" -width 0
-    pack   $lastDir.typical.$id($item).plus -side left -anchor nw -fill x -expand 0
-    text   $lastDir.typical.$id($item).txt -height 1 -width 25
-    pack   $lastDir.typical.$id($item).txt -side left -anchor nw -fill x -expand 0
-           $lastDir.typical.$id($item).txt insert end $item
+    frame  $lastDir.typical.$id($foldername($item)) -width 0
+    pack   $lastDir.typical.$id($foldername($item)) -side top -anchor nw -fill x -expand 0
+    button $lastDir.typical.$id($foldername($item)).plus -text "+" -width 0
+    pack   $lastDir.typical.$id($foldername($item)).plus -side left -anchor nw -fill x -expand 0
+    label  $lastDir.typical.$id($foldername($item)).txt -height 1 -width 25 -text $foldername($item)
+    pack   $lastDir.typical.$id($foldername($item)).txt -side left -anchor nw -fill x -expand 0
+
+    list_mazes $item $lastDir.typical.$id($foldername($item))
   }
   #-- ATYPICAL LIST
   foreach item $atypicalList {
-    set id($item) {}
-    set temp [split $item _]
+    set tmp [split $item /]
+    set foldername($item) [lindex $tmp [expr [llength $tmp] - 1]]
+    set id($foldername($item)) {}
+    set temp [split $foldername($item) _]
     set idparts {}
     foreach part $temp {
       lappend idparts [split $part .]
     }
     foreach part $idparts {
-      lappend id($item) $part
+      lappend id($foldername($item)) $part
     }
-    frame  $lastDir.atypical.$id($item) -width 0
-    pack   $lastDir.atypical.$id($item) -side top -anchor nw -fill x -expand 0
-    button $lastDir.atypical.$id($item).plus -text "+" -width 0
-    pack   $lastDir.atypical.$id($item).plus -side left -anchor nw -fill x -expand 0
-    text   $lastDir.atypical.$id($item).txt -height 1 -width 25
-    pack   $lastDir.atypical.$id($item).txt -side left -anchor nw -fill x -expand 0
-           $lastDir.atypical.$id($item).txt insert end $item
+    frame  $lastDir.atypical.$id($foldername($item)) -width 0
+    pack   $lastDir.atypical.$id($foldername($item)) -side top -anchor nw -fill x -expand 0
+    button $lastDir.atypical.$id($foldername($item)).plus -text "+" -width 0
+    pack   $lastDir.atypical.$id($foldername($item)).plus -side left -anchor nw -fill x -expand 0
+    label  $lastDir.atypical.$id($foldername($item)).txt -height 1 -width 25 -text $foldername($item)
+    pack   $lastDir.atypical.$id($foldername($item)).txt -side left -anchor nw -fill x -expand 0
+
+    list_mazes $item $lastDir.atypical.$id($foldername($item))
   }
 }
 
+#-- list the mazes each individual has gone through
 proc list_mazes { folder frame } {
 
-  global current_maze_dir
+  set list_mazes {}
 
   set contents [glob -directory $folder *]
   foreach item $contents {
@@ -174,14 +183,28 @@ proc list_mazes { folder frame } {
       set logs $item
     }
   }
-  set curr_maze "first_time"
 
-  if {split_data_file $folder} {
-    #-- if there is a new maze
-    if {$current_maze_dir(maze) ne $curr_maze} {
+  set contents [glob -directory $logs *]
 
-    } else {
-
+  foreach item $contents {
+    set repeat false
+    set this_maze [lindex [split $item -] 1]
+    foreach maze $list_mazes {
+      if {$maze eq $this_maze} {
+        set repeat true
+      }
+    }
+    if {$repeat eq "false"} {
+      lappend list_mazes $this_maze
     }
   }
+
+  foreach maze $list_mazes {
+    #frame $frame.$maze -width 0
+    #pack  $frame.$maze -side top -anchor nw -fill x -expand 0 -padx 10
+    label  $frame.txt($maze) -height 1 -width 7 -text $maze
+    pack   $frame.txt($maze) -side top -anchor nw -fill x -expand 0 -padx 10
+    #button $frame.txt($maze).b -text "Build" -width 0
+    #pack   $frame.txt($maze).b -side left -anchor nw -fill x -expand 0
+   }
 }

@@ -18,19 +18,21 @@ proc iterate_dir { dir } {
 proc separate_type { dir folderList } {
  global id_atypical
  global id_typical
- global foldername
+ #global foldername
 
  set id_atypical($dir) {}
  set id_typical($dir) {}
 
  foreach item $folderList {
    set type [lindex [split $item _] 2]
-   set tmp [split $item /]
-   set foldername($item) [lindex $tmp [expr [llength $tmp] - 1]]
+   #set tmp [split $item /]
+   #set foldername($item) [lindex $tmp [expr [llength $tmp] - 1]]
    if {$type == 1} {
-     lappend id_typical($dir) $foldername($item)
+     #lappend id_typical($dir) $foldername($item)
+     lappend id_typical($dir) $item
    } else {
-     lappend id_atypical($dir) $foldername($item)
+     #lappend id_atypical($dir) $foldername($item)
+     lappend id_atypical($dir) $item
    }
  }
 
