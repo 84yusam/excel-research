@@ -146,7 +146,7 @@ proc list_ids { dir atypicalList typicalList } {
     label  $lastDir.typical.$id($foldername($item)).txt -height 1 -width 25 -text $foldername($item)
     pack   $lastDir.typical.$id($foldername($item)).txt -side left -anchor nw -fill x -expand 0
 
-    list_mazes $item $lastDir.typical.$id($foldername($item))
+    list_mazes $item $lastDir.typical.$id($foldername($item)) $foldername($item)
   }
   #-- ATYPICAL LIST
   foreach item $atypicalList {
@@ -168,12 +168,14 @@ proc list_ids { dir atypicalList typicalList } {
     label  $lastDir.atypical.$id($foldername($item)).txt -height 1 -width 25 -text $foldername($item)
     pack   $lastDir.atypical.$id($foldername($item)).txt -side left -anchor nw -fill x -expand 0
 
-    list_mazes $item $lastDir.atypical.$id($foldername($item))
+    list_mazes $item $lastDir.atypical.$id($foldername($item)) $foldername($item)
   }
 }
 
 #-- list the mazes each individual has gone through
-proc list_mazes { folder frame } {
+proc list_mazes { folder frame foldername } {
+
+  #foldername passed to build_window as a way of getting ID
 
   global visible
   global current_maze_dir
@@ -209,7 +211,7 @@ proc list_mazes { folder frame } {
     pack   $frame.$maze -side top -anchor nw -fill x -expand 0 -padx 10
     label  $frame.$maze.txt($maze) -height 1 -width 7 -text $maze
     pack   $frame.$maze.txt($maze) -side top -anchor nw -fill x -expand 0 -padx 10
-    button $frame.$maze.b -text "Build" -width 0 -command [list build_window $maze $logs]
+    button $frame.$maze.b -text "Build" -width 0 -command [list build_window $maze $logs $foldername]
     pack   $frame.$maze.b -side top -anchor nw -fill x -expand 0
     set visible($frame.$maze) "true"
    }
