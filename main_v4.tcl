@@ -175,6 +175,9 @@ proc list_ids { dir atypicalList typicalList } {
 #-- list the mazes each individual has gone through
 proc list_mazes { folder frame } {
 
+  global visible
+  global current_maze_dir
+
   set list_mazes {}
 
   set contents [glob -directory $folder *]
@@ -187,24 +190,27 @@ proc list_mazes { folder frame } {
   set contents [glob -directory $logs *]
 
   foreach item $contents {
-    set repeat false
-    set this_maze [lindex [split $item -] 1]
-    foreach maze $list_mazes {
-      if {$maze eq $this_maze} {
-        set repeat true
+    if {[split_data_file $item]} {
+      set repeat false
+      #set this_maze [lindex [split $item -] 1]
+      foreach maze $list_mazes {
+        if {$maze eq $current_maze_dir(maze)} {
+          set repeat true
+        }
       }
-    }
-    if {$repeat eq "false"} {
-      lappend list_mazes $this_maze
+      if {$repeat eq "false"} {
+        lappend list_mazes $current_maze_dir(maze)
+      }
     }
   }
 
   foreach maze $list_mazes {
-    #frame $frame.$maze -width 0
-    #pack  $frame.$maze -side top -anchor nw -fill x -expand 0 -padx 10
-    label  $frame.txt($maze) -height 1 -width 7 -text $maze
-    pack   $frame.txt($maze) -side top -anchor nw -fill x -expand 0 -padx 10
-    #button $frame.txt($maze).b -text "Build" -width 0
-    #pack   $frame.txt($maze).b -side left -anchor nw -fill x -expand 0
+    frame  $frame.$maze -width 0
+    pack   $frame.$maze -side top -anchor nw -fill x -expand 0 -padx 10
+    label  $frame.$maze.txt($maze) -height 1 -width 7 -text $maze
+    pack   $frame.$maze.txt($maze) -side top -anchor nw -fill x -expand 0 -padx 10
+    button $frame.$maze.b -text "Build" -width 0
+    pack   $frame.$maze.b -side top -anchor nw -fill x -expand 0
+    set visible($frame.$maze) "true"
    }
 }
