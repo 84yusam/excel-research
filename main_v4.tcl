@@ -209,7 +209,7 @@ proc list_mazes { folder frame } {
     pack   $frame.$maze -side top -anchor nw -fill x -expand 0 -padx 10
     label  $frame.$maze.txt($maze) -height 1 -width 7 -text $maze
     pack   $frame.$maze.txt($maze) -side top -anchor nw -fill x -expand 0 -padx 10
-    button $frame.$maze.b -text "Build" -width 0
+    button $frame.$maze.b -text "Build" -width 0 -command [list build_window $maze $logs]
     pack   $frame.$maze.b -side top -anchor nw -fill x -expand 0
     set visible($frame.$maze) "true"
    }
