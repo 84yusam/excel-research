@@ -23,6 +23,15 @@ proc build_window { maze id_folder } {
     }
   }
 
+  set fileList {}
+
+  foreach item $logs {
+    set curr_maze [lindex [split $item -] 1]
+    if {$curr_maze eq $maze} {
+      lappend fileList $item
+    }
+  }
+
 
 }
 
