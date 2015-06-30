@@ -108,5 +108,55 @@ proc load_data { filename } {
   close $fh
 
   return [list $location $timeValues]
+}
 
+proc iterate_trials { file_list } {
+  set path_list {}
+  set time_data {}
+
+  foreach trial $file_list {
+    set retVal [process_trial_data $trial]
+    lappend path_list [lindex $retVal 0]
+    lappend time_data [lindex $retVal 1]
+  }
+
+  # precompute information for current maze
+  compute_ztime     $time_data
+  compute_zdist     $time_data
+  compute_PE_matrix [llength $time_data]
+
+  #build canvas(es) for current maze
+  set trial_cnt 0
+  foreach trial $file_list {
+    set curr_path_list [lindex $path_list $trial_cnt]
+    set curr_time_data [lindex $time_data $trial_cnt]
+
+    incr trial_cnt
+  }
+
+}
+
+proc process_trial_data {trial} {
+
+  global current_maze_dir
+
+  if {![regexp {^(.+)\_(.+)\_(.+)\-(.+)\-(.+)\-(\d+)\.(\d+)\.txt$} $trial match \
+      dir_date dir_time dir_iteration\
+      maze_number maze_trial \
+      file_date file_time ]} {
+    puts "Error in process_trial_data"
+    puts "dest  $dest_parent"
+    puts "trial $trial"
+  }
+
+  # determine data source
+  #set source       "[pwd]/$trial"
+
+  # load trial data
+  set data      [load_data $trial]
+  set path_list [lindex $data 0]
+  set time_data [lindex $data 1]
+
+  # return generated information
+  return [list $path_list $time_data]
 }

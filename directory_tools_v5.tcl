@@ -31,3 +31,17 @@ proc split_data_file { str } {
 
   }
 }
+
+proc select_maze {maze logs} {
+  global current_maze_dir
+  set contents [glob -directory $logs *]
+  set maze_list {}
+  foreach item $contents {
+    if {[split_data_file $item] == 1} {
+      if {$current_maze_dir(maze) eq $maze} {
+        lappend maze_list $item
+      }
+    }
+  }
+  return maze_list
+}
