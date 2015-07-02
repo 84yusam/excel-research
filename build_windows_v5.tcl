@@ -24,6 +24,7 @@ proc build_window { maze id_folder } {
   }
 
   set maze_list [select_maze $maze $logs]
+  iterate_trials $maze_list
 }
 
 #-- returns the ID without any punctuation

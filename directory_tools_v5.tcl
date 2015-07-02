@@ -43,5 +43,5 @@ proc select_maze {maze logs} {
       }
     }
   }
-  return maze_list
+  return $maze_list
 }

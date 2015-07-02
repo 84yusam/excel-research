@@ -145,7 +145,7 @@ proc process_trial_data {trial} {
       maze_number maze_trial \
       file_date file_time ]} {
     puts "Error in process_trial_data"
-    puts "dest  $dest_parent"
+    #puts "dest  $dest_parent"
     puts "trial $trial"
   }
 
