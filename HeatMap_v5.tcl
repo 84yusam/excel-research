@@ -5,6 +5,9 @@ source load_data_v5.tcl
 source directory_tools_v5.tcl
 source build_windows_v5.tcl
 source grid_info_v5.tcl
+source zscore_distance_v5.tcl
+source zscore_pe_v5.tcl
+source zscore_time_v5.tcl
 
 #####========= PROGRAM STARTS HERE ========#####
 
