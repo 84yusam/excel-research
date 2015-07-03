@@ -136,13 +136,14 @@ proc iterate_trials { maze id_folder } {
   compute_PE_matrix [llength $time_data]
 
   #build canvas(es) for current maze
-  set maincanvas [build_window $maze $id_folder]
+  set maincanvas [build_window $maze $id_folder [llength $file_list]]
+  tk_messageBox -message "Length: [llength $file_list]"
   set trial_cnt 0
   foreach trial $file_list {
     set curr_path_list [lindex $path_list $trial_cnt]
     set curr_time_data [lindex $time_data $trial_cnt]
 
-    #process_trial_canvas $window [llength $file_list]
+    process_trial_canvas $maincanvas [llength $file_list] $trial_cnt $trial
 
     incr trial_cnt
   }
