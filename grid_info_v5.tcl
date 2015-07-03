@@ -1,3 +1,8 @@
+global can_width
+global can_height
+global displaySize
+global displayOffset
+
 set dashPattern {2 2 2 2 2}
 set lineWidth   2
 

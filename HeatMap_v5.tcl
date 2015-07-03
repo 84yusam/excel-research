@@ -110,7 +110,7 @@ proc load_mazes { frame mazes id_folder } {
   frame $frame.mazes -width 0
   pack  $frame.mazes -side top -anchor nw -fill x -expand true
   foreach maze $mazes {
-    button $frame.mazes.$maze -height 1 -width 14 -text "Build $maze" -command [list build_window $maze $id_folder]
+    button $frame.mazes.$maze -height 1 -width 14 -text "Build $maze" -command [list iterate_trials $maze $id_folder]
     pack  $frame.mazes.$maze -side left -anchor nw -padx 10 -pady 10
   }
 }

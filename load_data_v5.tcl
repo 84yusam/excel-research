@@ -110,7 +110,17 @@ proc load_data { filename } {
   return [list $location $timeValues]
 }
 
-proc iterate_trials { file_list } {
+proc iterate_trials { maze id_folder } {
+
+  set contents [glob -directory $id_folder *]
+  foreach item $contents {
+    if {[file isdirectory $item] == 1} {
+      set logs $item
+    }
+  }
+
+  set file_list [select_maze $maze $logs]
+
   set path_list {}
   set time_data {}
 
@@ -126,10 +136,13 @@ proc iterate_trials { file_list } {
   compute_PE_matrix [llength $time_data]
 
   #build canvas(es) for current maze
+  set maincanvas [build_window $maze $id_folder]
   set trial_cnt 0
   foreach trial $file_list {
     set curr_path_list [lindex $path_list $trial_cnt]
     set curr_time_data [lindex $time_data $trial_cnt]
+
+    #process_trial_canvas $window [llength $file_list]
 
     incr trial_cnt
   }
