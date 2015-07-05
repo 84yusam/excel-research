@@ -1,5 +1,6 @@
 proc build_window { maze id_folder num_trials } {
   global can_width
+  global can_height
 
   set folderName [file tail $id_folder]
   set id [split_id $folderName]
@@ -15,16 +16,25 @@ proc build_window { maze id_folder num_trials } {
   button $t1.f1.b1 -text "Save all drawings in one image"
   pack   $t1.f1.b1 -side top -anchor nw -fill x -expand true
 
+  frame $t1.f2 -width 0
+  pack  $t1.f2 -side top -anchor nw -fill both -expand true
+
   if {$num_trials == 1} {
     set maincanwidth $can_width
-  } elseif {$num_trials ==2} {
+  } elseif {$num_trials == 2} {
     set maincanwidth [expr 2*$can_width]
   } else {
     set maincanwidth  [expr 3*$can_width]
   }
 
-  set  maincanvas [canvas $t1.f1.maincan -bg black -width $maincanwidth]
-  pack $maincanvas -side top -anchor nw -fill both -expand true
+  if {$num_trials > 3} {
+    set maincanheight [expr 2*$can_height]
+  } else {
+    set maincanheight [expr $can_height]
+  }
+
+  set  maincanvas [canvas $t1.f2.maincan -bg black -width $maincanwidth -height $maincanheight]
+  pack $maincanvas -side top -anchor nw -expand false
 
   #set contents [glob -directory $id_folder *]
   #foreach item $contents {
@@ -52,17 +62,19 @@ proc process_trial_canvas { maincan num_trials trial_cnt file_name } {
 
   #choose row based on the trial number of the canvas
   if {$current_maze_dir(maze_iteration) <= 3} {
-    set xLoc [expr $current_maze_dir(maze_iteration)*$can_width]
+    set xLoc [expr [expr $current_maze_dir(maze_iteration) - 1]*$can_width]
     set yLoc 0
   } else {
-    set xLoc [expr [expr $current_maze_dir(maze_iteration) - 1]*$can_width]
+    set xLoc [expr [expr $current_maze_dir(maze_iteration) - 4]*$can_width]
     set yLoc $can_height
   }
 
-  set win$trial_cnt [$maincan create window $xLoc $yLoc -width $can_width -height $can_height -window $subcan($trial_cnt)]
+  tk_messageBox -message "Trial: $current_maze_dir(maze_iteration) Width: $can_width Height: $can_height xLoc: $xLoc yLoc: $yLoc"
+
+  set win$trial_cnt [$maincan create window $xLoc $yLoc -width $can_width -height $can_height -anchor nw -window $subcan($trial_cnt)]
 
   #TEMP
   set tmp [expr $can_width / 2]
-  $subcan($trial_cnt) create rect $tmp $tmp [expr $tmp + 10] [expr $tmp + 10] -fill blue
+  $subcan($trial_cnt) create text 100 100 -text "Trial: $current_maze_dir(maze_iteration)"
 
 }

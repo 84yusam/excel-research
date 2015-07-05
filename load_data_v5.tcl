@@ -137,7 +137,6 @@ proc iterate_trials { maze id_folder } {
 
   #build canvas(es) for current maze
   set maincanvas [build_window $maze $id_folder [llength $file_list]]
-  tk_messageBox -message "Length: [llength $file_list]"
   set trial_cnt 0
   foreach trial $file_list {
     set curr_path_list [lindex $path_list $trial_cnt]
