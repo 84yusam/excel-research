@@ -10,6 +10,7 @@ source zscore_pe_v5.tcl
 source zscore_time_v5.tcl
 source create_draw_mazes_v5.tcl
 source draw_grid_v5.tcl
+source save_images_v5.tcl
 
 #####========= PROGRAM STARTS HERE ========#####
 
@@ -51,25 +52,24 @@ proc create_tabs { directory dirname } {
   global numDirs
   global new_typical
   global new_atypical
-  global typical
-  global atypical
+  global ids
 
   if {$numDirs == 1} {
-    toplevel .typical
-    wm title .typical "Typical Individuals"
-    set typical  [ttk::notebook .typical.tabs]
-    pack .typical.tabs -side top -anchor nw -expand true
-    toplevel .atypical
-    wm title .atypical "Atypical Individuals"
-    set atypical [ttk::notebook .atypical.tabs]
-    pack .atypical.tabs -side top -anchor nw -expand true
+    toplevel .ids
+    wm title .ids "All Individuals"
+    set ids  [ttk::notebook .ids.tabs]
+    pack .ids.tabs -side top -anchor nw -expand true
   }
 
-  $typical add [frame .typical.tabs.f$numDirs] -text $dirname
-  $atypical add [frame .atypical.tabs.f$numDirs] -text $dirname
+  $ids add [frame .ids.tabs.f$numDirs] -text $dirname
 
-  set new_typical  ".typical.tabs.f$numDirs"
-  set new_atypical ".atypical.tabs.f$numDirs"
+  labelframe .ids.tabs.f$numDirs.typical -width 0 -text "Typical"
+  pack       .ids.tabs.f$numDirs.typical -side left -anchor nw -expand true
+  labelframe .ids.tabs.f$numDirs.atypical -width 0 -text "Atypical"
+  pack       .ids.tabs.f$numDirs.atypical -side left -anchor nw -expand true
+
+  set new_typical  ".ids.tabs.f$numDirs.typical"
+  set new_atypical ".ids.tabs.f$numDirs.atypical"
 
 }
 
@@ -79,13 +79,23 @@ proc load_ids { directory typical atypical } {
   global new_typical
   global new_atypical
 
-  set num_ids($typical) 0
-  set num_ids($atypical) 0
+  set num_ids(typical) 0
+  set num_ids(atypical) 0
+
+  frame $new_typical.agg -width 0
+  pack  $new_typical.agg -side top -anchor nw -fill x -expand true
+  frame $new_atypical.agg -width 0
+  pack  $new_atypical.agg -side top -anchor nw -fill x -expand true
+
+  button $new_typical.agg.b -height 1 -width 9 -text "Aggregate"
+  pack   $new_typical.agg.b -side right -anchor ne
+  button $new_atypical.agg.b -height 1 -width 9 -text "Aggregate"
+  pack   $new_atypical.agg.b -side right -anchor ne
 
   foreach item $typical {
-    incr num_ids($typical)
+    incr num_ids(typical)
     set id($item) [file tail $item]
-    set frame($item) "$new_typical.id$num_ids($typical)"
+    set frame($item) "$new_typical.id$num_ids(typical)"
     frame $frame($item) -width 0
     pack  $frame($item) -side top -anchor nw -fill x -expand true
     label $frame($item).txt -height 1 -width 25 -text "ID: $id($item)"
@@ -95,9 +105,9 @@ proc load_ids { directory typical atypical } {
   }
 
   foreach item $atypical {
-    incr num_ids($atypical)
+    incr num_ids(atypical)
     set id($item) [file tail $item]
-    set frame($item) "$new_atypical.id$num_ids($atypical)"
+    set frame($item) "$new_atypical.id$num_ids(atypical)"
     frame $frame($item) -width 0
     pack  $frame($item) -side top -anchor nw -fill x -expand true
     label $frame($item).txt -height 1 -width 25 -text "ID: $id($item)"
@@ -112,7 +122,7 @@ proc load_mazes { frame mazes id_folder } {
   frame $frame.mazes -width 0
   pack  $frame.mazes -side top -anchor nw -fill x -expand true
   foreach maze $mazes {
-    button $frame.mazes.$maze -height 1 -width 14 -text "Build $maze" -command [list iterate_trials $maze $id_folder]
+    button $frame.mazes.$maze -height 1 -width 6 -text "$maze" -command [list iterate_trials $maze $id_folder]
     pack  $frame.mazes.$maze -side left -anchor nw -padx 10 -pady 10
   }
 }

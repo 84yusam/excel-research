@@ -133,8 +133,7 @@ proc iterate_trials { maze id_folder } {
   # precompute information for current maze
   compute_ztime     $time_data
   compute_zdist     $time_data
-  #compute_PE_matrix [llength $time_data]
-  compute_PE_matrix [llength $file_list]
+  compute_PE_matrix [llength $time_data]
 
   #build canvas(es) for current maze
   set maincanvas [build_window $maze $id_folder [llength $file_list]]

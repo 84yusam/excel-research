@@ -36,15 +36,7 @@ proc build_window { maze id_folder num_trials } {
   set  maincanvas [canvas $t1.f2.maincan -bg black -width $maincanwidth -height $maincanheight]
   pack $maincanvas -side top -anchor nw -expand false
 
-  #set contents [glob -directory $id_folder *]
-  #foreach item $contents {
-  #  if {[file isdirectory $item] == 1} {
-  #    set logs $item
-  #  }
-  #}
-
-  #set maze_list [select_maze $maze $logs]
-  #iterate_trials $maze_list $t1
+  $t1.f1.b1 configure -command [list save_all_drawings $maincanvas $maincanheight $maincanwidth $id $maze]
 
   return $maincanvas
 }
@@ -70,8 +62,6 @@ proc process_trial_canvas { maincan num_trials trial_cnt file_name } {
   }
 
   set win$trial_cnt [$maincan create window $xLoc $yLoc -width $can_width -height $can_height -anchor nw -window $subcan($trial_cnt)]
-  tk_messageBox -message "ID: $current_maze_dir(dir_date)$current_maze_dir(dir_time)$current_maze_dir(dir_iteration) \
-  $current_maze_dir(maze) Trial $current_maze_dir(maze_iteration)"
   $subcan($trial_cnt) create text 125 300 \
                       -text "ID: $current_maze_dir(dir_date)$current_maze_dir(dir_time)$current_maze_dir(dir_iteration) \
                       $current_maze_dir(maze) Trial $current_maze_dir(maze_iteration)"
