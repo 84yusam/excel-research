@@ -56,7 +56,7 @@ proc process_trial_canvas { maincan num_trials trial_cnt file_name } {
   global can_height
   global current_maze_dir
 
-  split_data_file $file_name
+  split_data_file [file tail $file_name]
 
   set subcan($trial_cnt) [canvas $maincan.can$trial_cnt -height $can_height -width $can_width]
 
@@ -69,12 +69,13 @@ proc process_trial_canvas { maincan num_trials trial_cnt file_name } {
     set yLoc $can_height
   }
 
-  tk_messageBox -message "Trial: $current_maze_dir(maze_iteration) Width: $can_width Height: $can_height xLoc: $xLoc yLoc: $yLoc"
-
   set win$trial_cnt [$maincan create window $xLoc $yLoc -width $can_width -height $can_height -anchor nw -window $subcan($trial_cnt)]
+  tk_messageBox -message "ID: $current_maze_dir(dir_date)$current_maze_dir(dir_time)$current_maze_dir(dir_iteration) \
+  $current_maze_dir(maze) Trial $current_maze_dir(maze_iteration)"
+  $subcan($trial_cnt) create text 125 300 \
+                      -text "ID: $current_maze_dir(dir_date)$current_maze_dir(dir_time)$current_maze_dir(dir_iteration) \
+                      $current_maze_dir(maze) Trial $current_maze_dir(maze_iteration)"
 
-  #TEMP
-  set tmp [expr $can_width / 2]
-  $subcan($trial_cnt) create text 100 100 -text "Trial: $current_maze_dir(maze_iteration)"
+  return $subcan($trial_cnt)
 
 }

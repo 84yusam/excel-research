@@ -8,6 +8,8 @@ source grid_info_v5.tcl
 source zscore_distance_v5.tcl
 source zscore_pe_v5.tcl
 source zscore_time_v5.tcl
+source create_draw_mazes_v5.tcl
+source draw_grid_v5.tcl
 
 #####========= PROGRAM STARTS HERE ========#####
 
