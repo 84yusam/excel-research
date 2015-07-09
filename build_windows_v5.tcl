@@ -1,14 +1,6 @@
 proc build_window { maze id_folder num_trials } {
   global can_width
   global can_height
-  global chosentrial
-
-  set triallist [list "Choose a trial"]
-  set chosentrial "Choose a trial"
-
-  for {set i 1} {$i <= $num_trials} {incr i} {
-    lappend triallist $i
-  }
 
   set folderName [file tail $id_folder]
   set id [split_id $folderName]
@@ -27,12 +19,8 @@ proc build_window { maze id_folder num_trials } {
   frame $t1.f2 -width 0
   pack  $t1.f2 -side top -anchor nw -fill x
 
-  button $t1.f2.b1 -text "Save individual drawing"
-  pack   $t1.f2.b1 -side left -anchor nw
-
-  ttk::combobox $t1.f2.cb -values $triallist -textvar chosentrial
-  pack          $t1.f2.cb -side left -anchor nw -fill x
-  $t1.f2.cb current 0
+  button $t1.f2.b1 -text "Save drawings individually"
+  pack   $t1.f2.b1 -side left -anchor nw -fill x -expand true
 
   frame $t1.f3 -width 0
   pack  $t1.f3 -side top -anchor nw -fill both -expand true
@@ -55,7 +43,7 @@ proc build_window { maze id_folder num_trials } {
   pack $maincanvas -side top -anchor nw -expand false
 
   $t1.f1.b1 configure -command [list save_all_drawings $maincanvas $maincanheight $maincanwidth $id $maze]
-  $t1.f2.b1 configure -command [list save_individual_drawing $maincanvas $chosentrial $id $maze]
+  $t1.f2.b1 configure -command [list save_individual_drawing $maincanvas $num_trials $id $maze]
 
   return $maincanvas
 }

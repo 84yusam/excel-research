@@ -163,9 +163,6 @@ proc process_trial_data {trial} {
     puts "trial $trial"
   }
 
-  # determine data source
-  #set source       "[pwd]/$trial"
-
   # load trial data
   set data      [load_data $trial]
   set path_list [lindex $data 0]
