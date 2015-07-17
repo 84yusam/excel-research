@@ -44,11 +44,11 @@ proc load_directory {} {
   label .f2.dir$numDirs -text "$numDirs) $dirname"
   pack  .f2.dir$numDirs -side top -anchor nw -expand 0
 
-  create_tabs $directory $dirname
+  create_tabs $directory
   get_ids $directory
 }
 
-proc create_tabs { directory dirname } {
+proc create_tabs { directory } {
   global numDirs
   global new_typical
   global new_atypical
@@ -61,7 +61,7 @@ proc create_tabs { directory dirname } {
     pack .ids.tabs -side top -anchor nw -expand true
   }
 
-  $ids add [frame .ids.tabs.f$numDirs] -text $dirname
+  $ids add [frame .ids.tabs.f$numDirs] -text [file tail $directory]
 
   labelframe .ids.tabs.f$numDirs.typical -width 0 -text "Typical"
   pack       .ids.tabs.f$numDirs.typical -side left -anchor nw -expand true
@@ -82,14 +82,16 @@ proc load_ids { directory typical atypical } {
   set num_ids(typical) 0
   set num_ids(atypical) 0
 
+  set dirname [file tail $directory]
+
   frame $new_typical.agg -width 0
   pack  $new_typical.agg -side top -anchor nw -fill x -expand true
   frame $new_atypical.agg -width 0
   pack  $new_atypical.agg -side top -anchor nw -fill x -expand true
 
-  button $new_typical.agg.b -height 1 -width 9 -text "Aggregate"
+  button $new_typical.agg.b -height 1 -width 9 -text "Aggregate" -command [list choose_aggs $dirname "Typical" $typical]
   pack   $new_typical.agg.b -side right -anchor ne
-  button $new_atypical.agg.b -height 1 -width 9 -text "Aggregate"
+  button $new_atypical.agg.b -height 1 -width 9 -text "Aggregate" -command [list choose_aggs $dirname "Atypical" $atypical]
   pack   $new_atypical.agg.b -side right -anchor ne
 
   foreach item $typical {

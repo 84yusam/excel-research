@@ -171,3 +171,33 @@ proc process_trial_data {trial} {
   # return generated information
   return [list $path_list $time_data]
 }
+
+proc get_aggregate_list { id_list } {
+  global current_maze_dir
+  global agg_maze_files
+  set mazelist {}
+
+  foreach folder $id_list {
+    set contents [glob -directory $folder *]
+    foreach item $contents {
+      if {[file isdirectory $item]} {
+        set logs $item
+      }
+    }
+    set contents [glob -directory $logs *]
+    foreach item $contents {
+      if {[split_data_file $item]} {
+        lappend agg_maze_files($current_maze_dir(maze)) $item
+      }
+    }
+  }
+
+  foreach {maze filelist} [array get agg_maze_files] {
+    lappend mazelist $maze
+  }
+  return $mazelist
+}
+
+proc iterate_aggregate { maze } {
+
+}

@@ -78,3 +78,51 @@ proc process_trial_canvas { maincan num_trials trial_cnt file_name } {
   return $subcan($current_trial)
 
 }
+
+proc choose_aggs { dirname type id_list } {
+  global choice
+  #set choice "Choose a maze."
+
+  toplevel .chooseaggs$dirname$type
+  wm title .chooseaggs$dirname$type "Choose Aggregate Mazes $dirname $type"
+
+  set ca ".chooseaggs$dirname$type"
+
+  set mazeoptions [lsort [get_aggregate_list $id_list]]
+
+  frame $ca.f1 -width 0
+  pack  $ca.f1 -side top -anchor nw -fill x -expand true
+  label $ca.f1.instructions -height 1 -width 50 -text "$dirname $type\: Choose up to 6 mazes to compare."
+  pack  $ca.f1.instructions -side top -anchor nw
+
+  for {set i 1} {$i <= 6} {incr i} {
+    set choice($dirname$type$i) "Choose a maze."
+    set framenum [expr $i + 1]
+    frame $ca.f$framenum -width 0
+    pack  $ca.f$framenum -side top -anchor nw -fill x -expand true
+    label $ca.f$framenum.txt -height 1 -width 8 -text "Choice $i"
+    pack  $ca.f$framenum.txt -side top -anchor nw -padx 10
+    ttk::combobox $ca.f$framenum.options -values $mazeoptions -textvar choice($dirname$type$i)
+    pack  $ca.f$framenum.options -side top -anchor nw -padx 10
+  }
+
+  frame  $ca.f8 -width 0
+  pack   $ca.f8 -side top -anchor nw -fill x -expand true
+  button $ca.f8.b1 -text "Build Aggregate Images" -command [list build_agg_windows $dirname $type]
+  pack   $ca.f8.b1 -side top -anchor nw -fill x -expand true -pady 10
+}
+
+proc build_agg_windows {dirname type} {
+  global choice
+  global can_width
+  global can_height
+
+  set agg_mazes {}
+
+  for {set i 1} {$i <= 6} {incr i} {
+    if {$choice($dirname$type$i) ne "Choose a maze."} {
+      lappend agg_mazes $choice($dirname$type$i)
+    }
+  }
+  set num_agg [llength $agg_mazes]
+}
