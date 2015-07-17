@@ -39,7 +39,7 @@ proc build_window { maze id_folder num_trials } {
     set maincanheight [expr $can_height]
   }
 
-  set  maincanvas [canvas $t1.f3.maincan -bg black -width $maincanwidth -height $maincanheight]
+  set  maincanvas [canvas $t1.f3.maincan -width $maincanwidth -height $maincanheight]
   pack $maincanvas -side top -anchor nw -expand false
 
   $t1.f1.b1 configure -command [list save_all_drawings $maincanvas $maincanheight $maincanwidth $id $maze]
@@ -125,4 +125,52 @@ proc build_agg_windows {dirname type} {
     }
   }
   set num_agg [llength $agg_mazes]
+  set lowerdirname [string tolower $dirname]
+
+
+  toplevel .$lowerdirname$type
+  wm title .$lowerdirname$type "Aggregate Mazes for $dirname $type"
+
+  set aw ".$lowerdirname$type"
+
+  frame $aw.f1 -width 0
+  pack  $aw.f1 -side top -anchor nw -fill x
+
+  button $aw.f1.b1 -text "Save all drawings in one image"
+  pack   $aw.f1.b1 -side top -anchor nw -fill x -expand true
+
+  frame $aw.f2 -width 0
+  pack  $aw.f2 -side top -anchor nw -fill x
+
+  button $aw.f2.b1 -text "Save drawings individually"
+  pack   $aw.f2.b1 -side left -anchor nw -fill x -expand true
+
+  frame $aw.f3 -width 0
+  pack  $aw.f3 -side top -anchor nw -fill both -expand true
+
+  if {$num_agg == 1} {
+    set maincanwidth $can_width
+  } elseif {$num_agg == 2} {
+    set maincanwidth [expr 2*$can_width]
+  } else {
+    set maincanwidth  [expr 3*$can_width]
+  }
+
+  if {$num_agg > 3} {
+    set maincanheight [expr 2*$can_height]
+  } else {
+    set maincanheight [expr $can_height]
+  }
+
+  set  maincanvas [canvas $aw.f3.maincan -width $maincanwidth -height $maincanheight]
+  pack $maincanvas -side top -anchor nw -expand false
+
+  return $maincanvas
+}
+
+proc process_agg_canvas { maincanvas maze } {
+  global agg_maze_files
+  global can_width
+  global can_height
+
 }

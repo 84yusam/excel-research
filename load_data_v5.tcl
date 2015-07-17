@@ -192,6 +192,7 @@ proc get_aggregate_list { id_list } {
     }
   }
 
+  #--mazelist is the different mazes that are options
   foreach {maze filelist} [array get agg_maze_files] {
     lappend mazelist $maze
   }
@@ -199,5 +200,6 @@ proc get_aggregate_list { id_list } {
 }
 
 proc iterate_aggregate { maze } {
+  global agg_maze_files
 
 }

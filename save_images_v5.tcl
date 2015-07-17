@@ -28,5 +28,12 @@ proc save_individual_drawing {maincan num_trials id maze} {
     }
     tk_messageBox -message "All images saved."
   }
+}
+
+proc save_all_agg {} {
+
+}
+
+proc save_individual_agg {} {
 
 }
