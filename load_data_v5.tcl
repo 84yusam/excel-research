@@ -198,8 +198,3 @@ proc get_aggregate_list { id_list } {
   }
   return $mazelist
 }
-
-proc iterate_aggregate { maze } {
-  global agg_maze_files
-
-}

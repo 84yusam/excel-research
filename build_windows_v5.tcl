@@ -81,7 +81,6 @@ proc process_trial_canvas { maincan num_trials trial_cnt file_name } {
 
 proc choose_aggs { dirname type id_list } {
   global choice
-  #set choice "Choose a maze."
 
   toplevel .chooseaggs$dirname$type
   wm title .chooseaggs$dirname$type "Choose Aggregate Mazes $dirname $type"
@@ -95,33 +94,35 @@ proc choose_aggs { dirname type id_list } {
   label $ca.f1.instructions -height 1 -width 50 -text "$dirname $type\: Choose up to 6 mazes to compare."
   pack  $ca.f1.instructions -side top -anchor nw
 
-  for {set i 1} {$i <= 6} {incr i} {
-    set choice($dirname$type$i) "Choose a maze."
-    set framenum [expr $i + 1]
-    frame $ca.f$framenum -width 0
-    pack  $ca.f$framenum -side top -anchor nw -fill x -expand true
-    label $ca.f$framenum.txt -height 1 -width 8 -text "Choice $i"
-    pack  $ca.f$framenum.txt -side top -anchor nw -padx 10
-    ttk::combobox $ca.f$framenum.options -values $mazeoptions -textvar choice($dirname$type$i)
-    pack  $ca.f$framenum.options -side top -anchor nw -padx 10
+  set framenum 2
+  foreach option $mazeoptions {
+    frame       $ca.f$framenum -width 0
+    pack        $ca.f$framenum -side top -anchor nw -fill x -expand true
+    checkbutton $ca.f$framenum.$option -variable choice($dirname$type$option) \
+                                       -command [list check_num_selected $dirname $type $option $mazeoptions $ca.f$framenum.$option]
+    pack        $ca.f$framenum.$option -side left -anchor nw
+    label       $ca.f$framenum.txt$option -height 1 -width 7 -text $option
+    pack        $ca.f$framenum.txt$option -side left -anchor nw
+
+    incr framenum
   }
 
   frame  $ca.f8 -width 0
   pack   $ca.f8 -side top -anchor nw -fill x -expand true
-  button $ca.f8.b1 -text "Build Aggregate Images" -command [list build_agg_windows $dirname $type]
+  button $ca.f8.b1 -text "Build Aggregate Images" -command [list build_agg_windows $dirname $type $mazeoptions]
   pack   $ca.f8.b1 -side top -anchor nw -fill x -expand true -pady 10
 }
 
-proc build_agg_windows {dirname type} {
+proc build_agg_windows {dirname type mazeoptions} {
   global choice
   global can_width
   global can_height
 
   set agg_mazes {}
 
-  for {set i 1} {$i <= 6} {incr i} {
-    if {$choice($dirname$type$i) ne "Choose a maze."} {
-      lappend agg_mazes $choice($dirname$type$i)
+  foreach option $mazeoptions {
+    if {$choice($dirname$type$option)} {
+      lappend agg_mazes $option
     }
   }
   set num_agg [llength $agg_mazes]
@@ -165,12 +166,54 @@ proc build_agg_windows {dirname type} {
   set  maincanvas [canvas $aw.f3.maincan -width $maincanwidth -height $maincanheight]
   pack $maincanvas -side top -anchor nw -expand false
 
-  return $maincanvas
+  set choicenum 1
+  foreach maze $agg_mazes {
+    set subcan [process_agg_canvas $dirname $type $choicenum $maincanvas $maze]
+    process_agg_paths $subcan $maze
+    incr choicenum
+  }
 }
 
-proc process_agg_canvas { maincanvas maze } {
+#--checks how many mazes have been selected
+proc check_num_selected { dirname type maze optionslist currbutton } {
+  global choice
+
+  set count 0
+  foreach option $optionslist {
+    if {$choice($dirname$type$option)} {
+      incr count
+    }
+  }
+  if {$count > 6} {
+    tk_messageBox -message "Please only choose up to 6 mazes to compare."
+    $currbutton deselect
+  }
+}
+
+proc process_agg_canvas { dirname type choicenum maincan maze } {
   global agg_maze_files
   global can_width
   global can_height
 
+  set subcan($dirname$type$maze) [canvas $maincan.can$dirname$type$maze -height $can_height -width $can_width]
+  if {$choicenum <= 3} {
+    set xLoc [expr [expr $choicenum - 1]*$can_width]
+    set yLoc 0
+  } else {
+    set xLoc [expr [expr $choicenum - 4]*$can_width]
+    set yLoc $can_height
+  }
+
+  $maincan create window $xLoc $yLoc -width $can_width -height $can_height -anchor nw -window $subcan($dirname$type$maze)
+  $subcan($dirname$type$maze) create text 125 300 -text "$dirname $type aggregate $maze"
+  return $subcan($dirname$type$maze)
+}
+
+proc process_agg_paths {canvas maze} {
+  global agg_maze_files
+  foreach item $agg_maze_files($maze) {
+    set retval [process_trial_data $item]
+    lappend path_list [lindex $retval 0]
+  }
+  create_draw_aggregate_maze $canvas $maze $path_list
 }
