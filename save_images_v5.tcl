@@ -30,7 +30,18 @@ proc save_individual_drawing {maincan num_trials id maze} {
   }
 }
 
-proc save_all_agg {} {
+proc save_all_agg { maincan can_height can_width dirname type } {
+  set saveloc [tk_chooseDirectory -title "Where should the file be saved?" -mustexist true]
+  set imgtype "aggregate"
+
+  if {$saveloc eq ""} {
+    tk_messageBox -message "Please choose a valid location."
+  } else {
+    set timestamp [clock format [clock seconds] -format %Y.%m.%d_%H.%M.%S]
+    set filename "$saveloc/$dirname\_$type\_$imgtype\_$timestamp.ps"
+    $maincan postscript -file $filename -width $can_width -height $can_height
+    tk_messageBox -message "File saved."
+  }
 
 }
 
