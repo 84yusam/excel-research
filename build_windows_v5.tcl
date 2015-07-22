@@ -174,6 +174,7 @@ proc build_agg_windows {dirname type mazeoptions} {
   }
 
   $aw.f1.b1 configure -command [list save_all_agg $maincanvas $maincanheight $maincanwidth $dirname $type]
+  $aw.f2.b1 configure -command [list save_individual_agg $maincanvas $agg_mazes $dirname $type]
 }
 
 #--checks how many mazes have been selected
