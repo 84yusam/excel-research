@@ -7,7 +7,7 @@ proc compute_data_time_matrix {time_data num_of_trials} {
 
   set prevTotalTime 0
 
-  for {set cnt 0} {$cnt < $num_of_trials} {incr cnt} {
+  for {set cnt 1} {$cnt <= $num_of_trials} {incr cnt} {
     foreach xval [list 0 1 2 3 4 5] {
       foreach yval [list 0 1 2 3 4 5] {
         set ztime_area_cnt_trial_time("$xval\_$yval\_$cnt") 0
@@ -15,7 +15,7 @@ proc compute_data_time_matrix {time_data num_of_trials} {
     }
   }
 
-  set cnt 0
+  set cnt 1
   foreach trial_data $time_data {
 
     foreach item $trial_data {
@@ -71,7 +71,7 @@ proc compute_average_time_matrix {num_of_trials} {
 
       set ztime_area_cnt_total_time("$xval\_$yval") 0
 
-      for {set cnt 0} {$cnt < $num_of_trials} {incr cnt} {
+      for {set cnt 1} {$cnt <= $num_of_trials} {incr cnt} {
 
         set ztime_area_cnt_total_time("$xval\_$yval")                 \
             [expr $ztime_area_cnt_total_time("$xval\_$yval") +        \
@@ -104,7 +104,7 @@ proc compute_squares_time_matrix {num_of_trials} {
   global ztime_tbar
   global ztime_squares_time
 
-  for {set cnt 0} {$cnt < $num_of_trials} {incr cnt} {
+  for {set cnt 1} {$cnt <= $num_of_trials} {incr cnt} {
 
     foreach xval [list 0 1 2 3 4 5] {
       foreach yval [list 0 1 2 3 4 5] {
@@ -131,7 +131,7 @@ proc compute_sigma_time_matrix {num_of_trials} {
 
       set ztime_sum_of_time_squares("$xval\_$yval") 0
 
-      for {set cnt 0} {$cnt < $num_of_trials} {incr cnt} {
+      for {set cnt 1} {$cnt <= $num_of_trials} {incr cnt} {
 
         set ztime_sum_of_time_squares("$xval\_$yval")            \
             [ expr $ztime_sum_of_time_squares("$xval\_$yval") +  \
@@ -157,7 +157,7 @@ proc compute_zscore_time {num_of_trials} {
   foreach xval [list 0 1 2 3 4 5] {
     foreach yval [list 0 1 2 3 4 5] {
 
-      for {set cnt 0} {$cnt < $num_of_trials} {incr cnt} {
+      for {set cnt 1} {$cnt <= $num_of_trials} {incr cnt} {
 
         if {$ztime_sigma_time("$xval\_$yval") != 0} {
 
@@ -198,7 +198,7 @@ proc compute_ztime   {time_data} {
 
   foreach xval [list 0 1 2 3 4 5] {
     foreach yval [list 0 1 2 3 4 5] {
-      for {set cnt 0} {$cnt < $num_of_trials} {incr cnt} {
+      for {set cnt 1} {$cnt <= $num_of_trials} {incr cnt} {
 
         if {$ztime_sigma_time("$xval\_$yval") != 0} {
 
@@ -215,7 +215,7 @@ proc compute_ztime   {time_data} {
 
   foreach xval [list 0 1 2 3 4 5] {
     foreach yval [list 0 1 2 3 4 5] {
-      for {set cnt 0} {$cnt < $num_of_trials} {incr cnt} {
+      for {set cnt 1} {$cnt <= $num_of_trials} {incr cnt} {
 
         if {$ztime_sigma_time("$xval\_$yval") != 0} {
 

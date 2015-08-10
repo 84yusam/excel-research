@@ -139,11 +139,12 @@ proc iterate_trials { maze id_folder } {
   set maincanvas [build_window $maze $id_folder [llength $file_list]]
   set trial_cnt 0
   foreach trial $file_list {
+    set start_one_trial_cnt [expr $trial_cnt + 1]
     set curr_path_list [lindex $path_list $trial_cnt]
     set curr_time_data [lindex $time_data $trial_cnt]
 
     set newcan [process_trial_canvas $maincanvas [llength $file_list] $trial_cnt $trial]
-    create_draw_pesky_maze $newcan $maze $trial_cnt $curr_path_list $curr_time_data
+    create_draw_pesky_maze $newcan $maze $start_one_trial_cnt $curr_path_list $curr_time_data
 
     incr trial_cnt
   }

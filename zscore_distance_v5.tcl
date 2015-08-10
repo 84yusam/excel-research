@@ -8,7 +8,7 @@ proc compute_data_dist_matrix {time_data num_of_trials} {
 	set prevXPos 0
 	set prevYPos 0
 
-  for {set cnt 0} {$cnt < $num_of_trials} {incr cnt} {
+  for {set cnt 1} {$cnt <= $num_of_trials} {incr cnt} {
     foreach xval [list 0 1 2 3 4 5] {
       foreach yval [list 0 1 2 3 4 5] {
         set zdist_area_cnt_trial_dist("$xval\_$yval\_$cnt") 0
@@ -16,7 +16,7 @@ proc compute_data_dist_matrix {time_data num_of_trials} {
     }
   }
 
-  set cnt 0
+  set cnt 1
   foreach trial_data $time_data {
 
     foreach item $trial_data {
@@ -52,7 +52,7 @@ proc compute_average_dist_matrix {num_of_trials} {
 
       set zdist_area_cnt_total_dist("$xval\_$yval") 0
 
-      for {set cnt 0} {$cnt < $num_of_trials} {incr cnt} {
+      for {set cnt 1} {$cnt <= $num_of_trials} {incr cnt} {
 
         set zdist_area_cnt_total_dist("$xval\_$yval")               \
             [expr $zdist_area_cnt_total_dist("$xval\_$yval") +      \
@@ -73,7 +73,7 @@ proc compute_squares_dist_matrix {num_of_trials} {
   global zdist_dbar
   global zdist_squares_dist
 
-  for {set cnt 0} {$cnt < $num_of_trials} {incr cnt} {
+  for {set cnt 1} {$cnt <= $num_of_trials} {incr cnt} {
 
     foreach xval [list 0 1 2 3 4 5] {
       foreach yval [list 0 1 2 3 4 5] {
@@ -102,7 +102,7 @@ proc compute_sigma_dist_matrix {num_of_trials} {
 
       set zdist_sum_of_dist_squares("$xval\_$yval") 0
 
-      for {set cnt 0} {$cnt < $num_of_trials} {incr cnt} {
+      for {set cnt 1} {$cnt <= $num_of_trials} {incr cnt} {
         set zdist_sum_of_dist_squares("$xval\_$yval") [ expr \
           $zdist_sum_of_dist_squares("$xval\_$yval") +       \
           $zdist_squares_dist("$xval\_$yval\_$cnt") ]
@@ -122,7 +122,7 @@ proc compute_zscore_dist {num_of_trials} {
   global zdist_sigma_dist
   global zdist_zscore_dist
 
-  for {set cnt 0} {$cnt < $num_of_trials} {incr cnt} {
+  for {set cnt 1} {$cnt <= $num_of_trials} {incr cnt} {
 
     foreach xval [list 0 1 2 3 4 5] {
       foreach yval [list 0 1 2 3 4 5] {
@@ -162,7 +162,7 @@ proc compute_zdist {time_data} {
 
   foreach xval [list 0 1 2 3 4 5] {
     foreach yval [list 0 1 2 3 4 5] {
-      for {set cnt 0} {$cnt < $num_of_trials} {incr cnt} {
+      for {set cnt 1} {$cnt <= $num_of_trials} {incr cnt} {
 
         if {$zdist_sigma_dist("$xval\_$yval") != 0} {
           if {$zdist_zscore_dist("$xval\_$yval\_$cnt") > $zdist_maxDistVal} {
@@ -177,7 +177,7 @@ proc compute_zdist {time_data} {
 
   foreach xval [list 0 1 2 3 4 5] {
     foreach yval [list 0 1 2 3 4 5] {
-      for {set cnt 0} {$cnt < $num_of_trials} {incr cnt} {
+      for {set cnt 1} {$cnt <= $num_of_trials} {incr cnt} {
 
         if {$zdist_sigma_dist("$xval\_$yval") != 0} {
           if {$zdist_zscore_dist("$xval\_$yval\_$cnt") < $zdist_minDistVal} {
