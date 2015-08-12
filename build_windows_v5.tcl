@@ -1,3 +1,4 @@
+#-- builds the window for displaying the images for a particular maze
 proc build_window { maze id_folder num_trials } {
   global can_width
   global can_height
@@ -25,6 +26,7 @@ proc build_window { maze id_folder num_trials } {
   frame $t1.f3 -width 0
   pack  $t1.f3 -side top -anchor nw -fill both -expand true
 
+  #-- set the size of the main canvas based on the number of trials
   if {$num_trials == 1} {
     set maincanwidth $can_width
   } elseif {$num_trials == 2} {
@@ -61,7 +63,7 @@ proc process_trial_canvas { maincan num_trials trial_cnt file_name } {
 
   set subcan($current_trial) [canvas $maincan.can$current_trial -height $can_height -width $can_width]
 
-  #choose row based on the trial number of the canvas
+  #--choose row based on the trial number of the canvas
   if {$current_trial <= 3} {
     set xLoc [expr $trial_cnt*$can_width]
     set yLoc 0
@@ -70,6 +72,7 @@ proc process_trial_canvas { maincan num_trials trial_cnt file_name } {
     set yLoc $can_height
   }
 
+  #-- creates a canvas within a canvas to allow user to save indiv. and grouped images
   set win$current_trial [$maincan create window $xLoc $yLoc -width $can_width -height $can_height -anchor nw -window $subcan($current_trial)]
   $subcan($current_trial) create text 125 300 \
                       -text "ID: $current_maze_dir(dir_date)$current_maze_dir(dir_time)$current_maze_dir(dir_iteration) \
@@ -79,6 +82,7 @@ proc process_trial_canvas { maincan num_trials trial_cnt file_name } {
 
 }
 
+#-- builds the window prompting the user to choose the mazes to show the aggregate for
 proc choose_aggs { dirname type id_list } {
   global choice
 
@@ -113,6 +117,7 @@ proc choose_aggs { dirname type id_list } {
   pack   $ca.f8.b1 -side top -anchor nw -fill x -expand true -pady 10
 }
 
+#-- builds the window for displaying the aggregate mazes
 proc build_agg_windows {dirname type mazeoptions} {
   global choice
   global can_width
@@ -177,7 +182,7 @@ proc build_agg_windows {dirname type mazeoptions} {
   $aw.f2.b1 configure -command [list save_individual_agg $maincanvas $agg_mazes $dirname $type]
 }
 
-#--checks how many mazes have been selected
+#--checks how many mazes have been selected for the aggregate window
 proc check_num_selected { dirname type maze optionslist currbutton } {
   global choice
 
@@ -193,6 +198,7 @@ proc check_num_selected { dirname type maze optionslist currbutton } {
   }
 }
 
+#-- creates the subcanvases for the aggregate maze images
 proc process_agg_canvas { dirname type choicenum maincan maze } {
   global agg_maze_files
   global can_width
@@ -212,6 +218,7 @@ proc process_agg_canvas { dirname type choicenum maincan maze } {
   return $subcan($dirname$type$maze)
 }
 
+#-- draws in paths for aggregate images
 proc process_agg_paths {canvas maze} {
   global agg_maze_files
   foreach item $agg_maze_files($maze) {

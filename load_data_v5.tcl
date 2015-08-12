@@ -110,6 +110,7 @@ proc load_data { filename } {
   return [list $location $timeValues]
 }
 
+#-- given a particular ID and maze, goes through the trials for that maze and computes zscores and builds a canvas
 proc iterate_trials { maze id_folder } {
 
   set contents [glob -directory $id_folder *]
@@ -151,6 +152,7 @@ proc iterate_trials { maze id_folder } {
 
 }
 
+#-- goes through the data for a particular trial
 proc process_trial_data {trial} {
 
   global current_maze_dir
@@ -173,6 +175,7 @@ proc process_trial_data {trial} {
   return [list $path_list $time_data]
 }
 
+#-- creates a list of all of the mazes run by all atypical or typical IDs in one directory
 proc get_aggregate_list { id_list } {
   global current_maze_dir
   global agg_maze_files

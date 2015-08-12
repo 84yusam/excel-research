@@ -1,3 +1,5 @@
+#-- uses the file name to establish information about the maze, trial, and date.
+#-- note that dir_iteration is actually the reading type
 proc split_data_file { str } {
 
   global current_maze_dir
@@ -32,6 +34,7 @@ proc split_data_file { str } {
   }
 }
 
+#-- given the logs for a particular individual, identify all files that go with a particular maze
 proc select_maze {maze logs} {
   global current_maze_dir
   set contents [glob -directory $logs *]

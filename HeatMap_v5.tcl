@@ -33,6 +33,7 @@ pack       .f2 -side top -anchor nw -fill both -expand 0
 
 #####========= PROCS ========#####
 
+#-- prompts the user to upload a directory
 proc load_directory {} {
   global numDirs
 
@@ -48,6 +49,7 @@ proc load_directory {} {
   get_ids $directory
 }
 
+#-- creates a new tab for each additional directory
 proc create_tabs { directory } {
   global numDirs
   global new_typical
@@ -73,6 +75,7 @@ proc create_tabs { directory } {
 
 }
 
+#-- goes through the lists of typical and atypical IDs and lists each one with its mazes
 proc load_ids { directory typical atypical } {
   global num_ids
   global id
@@ -119,6 +122,7 @@ proc load_ids { directory typical atypical } {
   }
 }
 
+#-- create the button for each maze
 proc load_mazes { frame mazes id_folder } {
 
   frame $frame.mazes -width 0
